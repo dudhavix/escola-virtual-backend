@@ -1,15 +1,23 @@
 import { Module } from '@nestjs/common';
 import * as dotenv from "dotenv";
 import { MongooseModule } from '@nestjs/mongoose';
-import { AlunoSchema } from './domain/schemas/aluno.schema';
-import { TurmaSchema } from './domain/schemas/turma.schema';
-import { AlunoController } from './adapter/controllers/aluno.controller';
-import { AlunoService } from './domain/services/aluno.service';
+import { ProfessorSchema } from './domain/repository/schema/professor.schema';
+import { AgendamentoSchema } from './domain/repository/schema/agendamento.schema';
+import { AlunoSchema } from './domain/repository/schema/aluno.schema';
+import { ArquivoSchema } from './domain/repository/schema/arquivo.schema';
+import { AulaSchema } from './domain/repository/schema/aula.schema';
+import { GramaticaSchema } from './domain/repository/schema/gramatica.schema';
+import { PautaSchema } from './domain/repository/schema/pauta.schema';
+import { TarefaAlunoSchema } from './domain/repository/schema/tarefa-aluno.schema';
+import { TarefaSchema } from './domain/repository/schema/tarefa.schema';
+import { TurmaAulaSchema } from './domain/repository/schema/turma-aula.schema';
+import { TurmaSchema } from './domain/repository/schema/turma.schema';
+import { ProfessorRepository } from './domain/repository/professor.repository';
+import { ProfessorController } from './adapter/controllers/professor.controller';
+import { ProfessorService } from './domain/service/professor.service';
+import { TurmaRepository } from './domain/repository/turma.repository';
+import { TurmaService } from './domain/service/turma.service';
 import { TurmaController } from './adapter/controllers/turma.controller';
-import { TurmaService } from './domain/services/turma.service';
-import { PautaSchema } from './domain/schemas/pauta.schema';
-import { PautaController } from './adapter/controllers/pauta.controller';
-import { PautaService } from './domain/services/pauta.service';
 
 dotenv.config();
 
@@ -18,19 +26,33 @@ dotenv.config();
         MongooseModule.forRoot(`mongodb+srv://dudhavix:ww!t4aGBNSKsxQx@develop.mu5sk.mongodb.net/escola_virtual?retryWrites=true&w=majority`,
         { useNewUrlParser: true, useUnifiedTopology: true }),
     
+        MongooseModule.forFeature([{name: 'Agendamento', schema: AgendamentoSchema}]),
         MongooseModule.forFeature([{name: 'Aluno', schema: AlunoSchema}]),
-        MongooseModule.forFeature([{name: 'Turma', schema: TurmaSchema}]),
+        MongooseModule.forFeature([{name: 'Arquivo', schema: ArquivoSchema}]),
+        MongooseModule.forFeature([{name: 'Aula', schema: AulaSchema}]),
+        MongooseModule.forFeature([{name: 'Gramatica', schema: GramaticaSchema}]),
         MongooseModule.forFeature([{name: 'Pauta', schema: PautaSchema}]),
+        MongooseModule.forFeature([{name: 'Professor', schema: ProfessorSchema}]),
+        MongooseModule.forFeature([{name: 'TarefaAluno', schema: TarefaAlunoSchema}]),
+        MongooseModule.forFeature([{name: 'Tarefa', schema: TarefaSchema}]),
+        MongooseModule.forFeature([{name: 'TurmaAula', schema: TurmaAulaSchema}]),
+        MongooseModule.forFeature([{name: 'Turma', schema: TurmaSchema}]),
     ],
     controllers: [
-        AlunoController,
-        TurmaController,
-        PautaController
+        ProfessorController,
+        TurmaController
     ],
     providers: [
-        AlunoService,
+        ProfessorService,
+        {
+            provide: "ProfessorRepository",
+            useClass: ProfessorRepository
+        },
         TurmaService,
-        PautaService
+        {
+            provide: "TurmaRepository",
+            useClass: TurmaRepository
+        }
     ],
 })
 export class AppModule { }
