@@ -1,23 +1,23 @@
 import { Module } from '@nestjs/common';
 import * as dotenv from "dotenv";
 import { MongooseModule } from '@nestjs/mongoose';
-import { ProfessorSchema } from './domain/repository/schema/professor.schema';
-import { AgendamentoSchema } from './domain/repository/schema/agendamento.schema';
-import { AlunoSchema } from './domain/repository/schema/aluno.schema';
-import { ArquivoSchema } from './domain/repository/schema/arquivo.schema';
-import { AulaSchema } from './domain/repository/schema/aula.schema';
-import { GramaticaSchema } from './domain/repository/schema/gramatica.schema';
-import { PautaSchema } from './domain/repository/schema/pauta.schema';
-import { TarefaAlunoSchema } from './domain/repository/schema/tarefa-aluno.schema';
-import { TarefaSchema } from './domain/repository/schema/tarefa.schema';
-import { TurmaAulaSchema } from './domain/repository/schema/turma-aula.schema';
-import { TurmaSchema } from './domain/repository/schema/turma.schema';
-import { ProfessorRepository } from './domain/repository/professor.repository';
-import { ProfessorController } from './adapter/controllers/professor.controller';
-import { ProfessorService } from './domain/service/professor.service';
-import { TurmaRepository } from './domain/repository/turma.repository';
-import { TurmaService } from './domain/service/turma.service';
-import { TurmaController } from './adapter/controllers/turma.controller';
+import { ProfessorSchema } from './professor/professor.schema';
+import { AgendamentoSchema } from './agendamento/agendamento.schema';
+import { AlunoSchema } from './aluno/aluno.schema';
+import { ArquivoSchema } from './arquivo/arquivo.schema';
+import { AulaSchema } from './aula/aula.schema';
+import { GramaticaSchema } from './gramatica/gramatica.schema';
+import { PautaSchema } from './pauta/pauta.schema';
+import { TarefaAlunoSchema } from './tarefa-aluno/tarefa-aluno.schema';
+import { TarefaSchema } from './tarefa/tarefa.schema';
+import { TurmaAulaSchema } from './turma-aula/turma-aula.schema';
+import { TurmaSchema } from './turma/turma.schema';
+import { ProfessorRepository } from './professor/professor.repository';
+import { ProfessorController } from './professor/professor.controller';
+import { ProfessorService } from './professor/professor.service';
+import { TurmaRepository } from './turma/turma.repository';
+import { TurmaService } from './turma/turma.service';
+import { TurmaController } from './turma/turma.controller';
 
 dotenv.config();
 
@@ -33,10 +33,10 @@ dotenv.config();
         MongooseModule.forFeature([{name: 'Gramatica', schema: GramaticaSchema}]),
         MongooseModule.forFeature([{name: 'Pauta', schema: PautaSchema}]),
         MongooseModule.forFeature([{name: 'Professor', schema: ProfessorSchema}]),
-        MongooseModule.forFeature([{name: 'TarefaAluno', schema: TarefaAlunoSchema}]),
         MongooseModule.forFeature([{name: 'Tarefa', schema: TarefaSchema}]),
-        MongooseModule.forFeature([{name: 'TurmaAula', schema: TurmaAulaSchema}]),
+        MongooseModule.forFeature([{name: 'TarefaAluno', schema: TarefaAlunoSchema}]),
         MongooseModule.forFeature([{name: 'Turma', schema: TurmaSchema}]),
+        MongooseModule.forFeature([{name: 'TurmaAula', schema: TurmaAulaSchema}]),
     ],
     controllers: [
         ProfessorController,
