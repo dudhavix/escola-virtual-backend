@@ -17,7 +17,7 @@ export const AlunoSchema = new Schema<AlunoDocument>({
     observacao: { type: String, required: false },
     nivelAtual: { type: String, enum: Object.values(NivelEnum), required: true },
     nivelMeta: { type: String, enum: Object.values(NivelEnum), required: true },
-    ativo: { type: String, enum: Object.values(StatusEnum), required: true }
+    status: { type: String, enum: Object.values(StatusEnum), required: true }
 }, {
     timestamps: true,
     collection: "Aluno"

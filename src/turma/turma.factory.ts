@@ -1,9 +1,9 @@
-import { TurmaCreateViewModel } from "src/turma/turma.dto";
-import { TurmaEntity } from "./turma.entity";
+import { TurmaCreateViewModel, TurmaUpdateViewModel, } from "src/turma/turma.dto";
 import { FrequenciaEnum } from "../enum/frequencia.enum";
 import { TagEnum } from "../enum/tag.enum";
+import { TurmaEntity } from "./turma.entity";
 
-export const TurmaFactory = (viewModel: TurmaCreateViewModel): TurmaEntity => {
+export const TurmaFactory = (viewModel: TurmaCreateViewModel | TurmaUpdateViewModel): TurmaEntity => {
     var { professor, nome, tag,  frequencia, observacao } = viewModel;
     
     tag = TagEnum[tag];

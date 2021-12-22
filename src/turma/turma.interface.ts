@@ -9,12 +9,3 @@ export interface Turma {
     frequencia: FrequenciaEnum;
     observacao: string;
 }
-
-export interface TurmaUpdate {
-    _id: string;
-    professor: Professor;
-    tag: TagEnum;
-    nome: string;
-    frequencia: FrequenciaEnum;
-    observacao: string;
-}

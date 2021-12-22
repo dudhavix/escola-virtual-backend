@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
-import { TurmaCreateViewModel } from "src/turma/turma.dto";
+import { TurmaCreateViewModel, TurmaUpdateViewModel } from "src/turma/turma.dto";
 import { TurmaFactory } from "./turma.factory";
 import { Professor } from "../professor/professor.interface";
 import { Turma } from "./turma.interface";
@@ -18,7 +18,7 @@ export class TurmaService {
         try {
             const entity = TurmaFactory(turma);
             await this.repository.create(entity);
-            return new HttpException('Turma criada com sucesso', HttpStatus.CREATED);
+            return new HttpException('Turma criada', HttpStatus.CREATED);
         } catch (error) {
             this.logger.error(error);
             throw new Error("Desculpe ocorreu um erro");
@@ -45,6 +45,28 @@ export class TurmaService {
                 return new HttpException('Nenhuma turma encontrada', HttpStatus.NOT_FOUND);
             }
             return turma;
+        } catch (error) {
+            this.logger.error(error);
+            throw new Error("Desculpe ocorreu um erro");
+        }
+    }
+
+    async update(turma: TurmaUpdateViewModel): Promise<HttpException> {
+        try {
+            const { _id, ...info} = turma;
+            const entity = TurmaFactory(info);
+            await this.repository.update(entity, _id);
+            return new HttpException('Turma atualizada', HttpStatus.OK);
+        } catch (error) {
+            this.logger.error(error);
+            throw new Error("Desculpe ocorreu um erro");
+        }
+    }
+
+    async delete(_id: string): Promise<HttpException> {
+        try {
+            await this.repository.delete(_id);
+            return new HttpException('Turma excluida', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
             throw new Error("Desculpe ocorreu um erro");

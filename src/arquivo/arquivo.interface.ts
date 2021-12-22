@@ -1,4 +1,6 @@
 export interface Arquivo {
     nome: string;
-    path: string;
+    tamanho: string;
+    caminho: string;
+    formato: string;
 }

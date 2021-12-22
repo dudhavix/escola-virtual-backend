@@ -13,10 +13,10 @@ export class ProfessorRepository {
     }
 
     async getId(_id: string): Promise<Professor> {
-        return await this.model.findOne({ _id }, { senha: 0 });
+        return this.model.findOne({ _id }, { senha: 0 });
     }
 
     async getAll(): Promise<Professor[]> {
-        return await this.model.find({}, { senha: 0 });
+        return this.model.find({}, { senha: 0 });
     }
 } 

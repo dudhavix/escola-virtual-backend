@@ -1,7 +1,7 @@
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Professor } from "../professor/professor.interface";
-import { Turma, TurmaUpdate } from "./turma.interface";
+import { Turma } from "./turma.interface";
 import { TurmaDocument } from "./turma.schema";
 
 export class TurmaRepository {
@@ -14,15 +14,15 @@ export class TurmaRepository {
     }
 
     async getAll(professor: Professor): Promise<Turma[]> {
-        return await this.model.find({professor});
+        return this.model.find({professor});
     }
 
     async getId(_id: string): Promise<Turma> {
-        return await this.model.findOne({ _id });
+        return this.model.findOne({ _id });
     }
 
-    async update(turma: TurmaUpdate): Promise<void> {
-        await this.model.findByIdAndUpdate({ _id: turma._id }, { $set: turma });
+    async update(turma: Turma, _id: string): Promise<void> {
+        await this.model.findByIdAndUpdate({ _id }, { $set: turma });
     }
 
     async delete(_id: string): Promise<void> {

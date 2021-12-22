@@ -19,5 +19,5 @@ export interface Aluno {
     nivelAtual: NivelEnum;
     nivelMeta: NivelEnum;
 
-    ativo: StatusEnum
+    status: StatusEnum;
 }

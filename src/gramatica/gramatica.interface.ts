@@ -5,5 +5,6 @@ export interface Gramatica {
     professor: Professor;
     sentenca1: string;
     sentenca2: string;
+    sentenca3: string;
     nivel: NivelEnum;
 }

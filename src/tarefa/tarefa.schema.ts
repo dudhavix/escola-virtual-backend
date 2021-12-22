@@ -5,7 +5,7 @@ export interface TarefaDocument extends Tarefa, Document { }
 
 export const TarefaSchema = new Schema<TarefaDocument>({
     aula: { type: Schema.Types.ObjectId, ref: "Aula", required: true },
-    arquivos: [{ type: Schema.Types.ObjectId, ref: "Arquivo", required: true }],
+    arquivos: [{ type: Schema.Types.ObjectId, ref: "Arquivo", required: false }],
     observacao: { type: String, required: false },
     dataEntrega: { type: String, required: true },
 }, {

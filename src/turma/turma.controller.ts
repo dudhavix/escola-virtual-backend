@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Header, Headers, HttpException, Param, Post, Put, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Header, Headers, HttpException, Param, Post, Put, Req, UsePipes, ValidationPipe } from "@nestjs/common";
 import { Professor } from "src/professor/professor.interface";
 import { TurmaService } from "src/turma/turma.service";
-import { TurmaCreateViewModel } from "./turma.dto";
+import { TurmaCreateViewModel, TurmaUpdateViewModel } from "./turma.dto";
 
 
 @Controller("api/turma")
@@ -13,17 +13,27 @@ export class TurmaController {
 
     @Post("/create")
     @UsePipes(ValidationPipe)
-    async create(@Body() turma: TurmaCreateViewModel): Promise<HttpException> {
-        return await this.turmaService.create(turma);
+    async create( @Body() turma: TurmaCreateViewModel ): Promise<HttpException> {
+        return this.turmaService.create(turma);
     }
 
     @Get("/getAll")
     async getAll( @Headers("professor") professor: Professor ): Promise<any> {
-        return await this.turmaService.getAll(professor);
+        return this.turmaService.getAll(professor);
     }
 
     @Get("/getId/:turma")
     async getId( @Param("turma") turma: string ): Promise<any> {
-        return await this.turmaService.getId(turma);
+        return this.turmaService.getId(turma);
+    }
+
+    @Put("/update")
+    async update( @Body() turma: TurmaUpdateViewModel ): Promise<HttpException> {
+        return this.turmaService.update(turma);
+    }
+
+    @Delete("/delete/:turma")
+    async delete( @Param("turma") turma: string ): Promise<HttpException> {
+        return this.turmaService.delete(turma);
     }
 }

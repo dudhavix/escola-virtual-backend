@@ -23,3 +23,24 @@ export class TurmaCreateViewModel {
     @IsString()
     observacao: string;
 }
+
+export class TurmaUpdateViewModel {
+    readonly _id: string;
+    readonly professor: Professor;
+
+    @IsString()
+    @IsOptional()
+    tag: TagEnum;
+
+    @IsString()
+    @IsOptional()
+    nome: string;
+
+    @IsString()
+    @IsOptional()
+    frequencia: FrequenciaEnum;
+
+    @IsString()
+    @IsOptional()
+    observacao: string;
+}

@@ -7,7 +7,7 @@ export const AulaSchema = new Schema<AulaDocument>({
     professor: { type: Schema.Types.ObjectId, ref: "Professor", required: true },
     temaAula: { type: String, required: true },
     observacao: { type: String, required: false },
-    arquivos: [{ type: Schema.Types.ObjectId, ref: "Arquivo", required: true }]
+    arquivos: [{ type: Schema.Types.ObjectId, ref: "Arquivo", required: false }]
 }, {
     timestamps: true,
     collection: "Aula"

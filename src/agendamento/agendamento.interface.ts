@@ -4,4 +4,5 @@ import { Turma } from "../turma/turma.interface";
 export interface Agendamento {
     professor: Professor;
     turma: Turma;
+    dataHora: string;
 }

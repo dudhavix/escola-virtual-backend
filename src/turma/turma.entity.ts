@@ -11,14 +11,3 @@ export class TurmaEntity {
         public observacao: string,
     ){ }
 }
-
-export class TurmaUpdateEntity {
-    constructor(
-        public _id: string,
-        public professor: Professor,
-        public tag: TagEnum,
-        public nome: string,
-        public frequencia: FrequenciaEnum,
-        public observacao: string,
-    ){ }
-}

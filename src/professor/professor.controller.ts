@@ -12,17 +12,17 @@ export class ProfessorController {
     @Post("/create")
     @UsePipes(ValidationPipe)
     async create( @Body() professor: ProfessorCreateViewModel ): Promise<HttpException> {
-        return await this.professorService.create(professor);
+        return this.professorService.create(professor);
     }
 
     @Get("/getAll")
     async getAll(): Promise<any> {
-        return await this.professorService.getAll();
+        return this.professorService.getAll();
     }
 
     @Get("/getId/:professor")
     async getId( @Param("professor") professor: string ): Promise<any> {
-        return await this.professorService.getId(professor);
+        return this.professorService.getId(professor);
     }
 
 }

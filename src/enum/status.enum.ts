@@ -1,4 +1,7 @@
 export enum StatusEnum {
-    ativado = "ativado",
-    desativado = "desativado",
+    pendente = "pendente",
+    concluido = "concluido",
+    naoFez = "não fez",
+    ativo = "ativo",
+    inativo = "inativo",
 }
