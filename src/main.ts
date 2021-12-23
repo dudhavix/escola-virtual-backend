@@ -21,7 +21,7 @@ async function bootstrap() {
 
     console.log(process.env.PORTA);
 
-    await app.listen(process.env.PORTA || 5000);
+    await app.listen(process.env.PORT || 3333);
 }
 
 bootstrap();

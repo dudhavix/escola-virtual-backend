@@ -50,7 +50,7 @@ dotenv.config();
 
 @Module({
     imports: [
-        MongooseModule.forRoot(`mongodb+srv://dudhavix:ww!t4aGBNSKsxQx@develop.mu5sk.mongodb.net/escola_virtual?retryWrites=true&w=majority`,
+        MongooseModule.forRoot(`${process.env.BD_URL}`,
         { useNewUrlParser: true, useUnifiedTopology: true }),
     
         MongooseModule.forFeature([{name: 'Agendamento', schema: AgendamentoSchema}]),
