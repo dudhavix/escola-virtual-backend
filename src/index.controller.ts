@@ -1,7 +1,7 @@
 import { Controller, Get } from "@nestjs/common";
 
 @Controller("api/")
-export class AlunoController {
+export class IndexController {
     constructor() { }
 
     @Get("")

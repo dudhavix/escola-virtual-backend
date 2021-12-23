@@ -45,6 +45,7 @@ import { TarefaAlunoRepository } from './tarefa-aluno/tarefa-aluno.repository';
 import { PautaController } from './pauta/pauta.controller';
 import { PautaRepository } from './pauta/pauta.repository';
 import { PautaService } from './pauta/pauta.service';
+import { IndexController } from './index.controller';
 
 dotenv.config();
 
@@ -76,7 +77,8 @@ dotenv.config();
         TarefaController,
         AlunoController,
         TarefaAlunoController,
-        PautaController
+        PautaController,
+        IndexController
     ],
     providers: [
         ProfessorService,
