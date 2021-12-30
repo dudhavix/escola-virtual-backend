@@ -1,7 +1,6 @@
 import { UsuarioController } from './usuario/usuario.controller';
 import { UsuarioService } from './usuario/usuario.service';
 import { Module } from '@nestjs/common';
-import * as dotenv from "dotenv";
 import { MongooseModule } from '@nestjs/mongoose';
 import { IndexController } from './index.controller';
 import { UsuarioSchema } from './usuario/usuario.schema';
@@ -20,11 +19,22 @@ import { ArquivoSchema } from './arquivo/arquivo.schema';
 import { ArquivoController } from './arquivo/arquivo.controller';
 import { ArquivoService } from './arquivo/arquivo.service';
 import { ArquivoRepository } from './arquivo/arquivo.repository';
-
-dotenv.config();
+import { AuthController } from './auth/auth.controller';
+import { AuthService } from './auth/auth.service';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { LocalStrategy } from './auth/local.strategy';
+import { JwtStrategy } from './auth/jwt.strategy';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
     imports: [
+        ConfigModule.forRoot(),
+        PassportModule,
+        JwtModule.register({
+            secret: process.env.SECRET,
+            signOptions: { expiresIn: '1d' },
+        }),
         MongooseModule.forRoot(`${process.env.BD_URL}`, { useNewUrlParser: true, useUnifiedTopology: true }),
         MongooseModule.forFeature([{name: 'Aluno', schema: AlunoSchema}]),
         MongooseModule.forFeature([{name: 'Arquivo', schema: ArquivoSchema}]),
@@ -34,11 +44,15 @@ dotenv.config();
     ],
     controllers: [
         ArquivoController,
+        AuthController,
         TurmaController,
         UsuarioController,
         IndexController
     ],
     providers: [
+        AuthService,
+        LocalStrategy,
+        JwtStrategy,
         AlunoService,
         {
             provide: "AlunoRepository",

@@ -5,11 +5,11 @@ import { StatusEnum } from "../enum/status.enum";
 export interface Usuario {
     nome: string;
     email: string;
-    senha: string;
     telefone: string;
     dataNascimento: string;
     foto: Arquivo;
     nivelAcesso: NivelAcessoEnum;
+    senha?: string;
     status?: StatusEnum;
     _id?: string;
 }
