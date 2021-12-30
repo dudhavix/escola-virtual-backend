@@ -19,7 +19,7 @@ async function bootstrap() {
             .format('DD-MM-YYYY HH:mm:ss')
     }
 
-    console.log(process.env.PORTA);
+    console.log(process.env.PORT);
 
     await app.listen(process.env.PORT || 3333);
 }

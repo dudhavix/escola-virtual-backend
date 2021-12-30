@@ -1,13 +1,11 @@
-import { Document, Schema } from "mongoose";
+import { Schema } from "mongoose";
 import { IdiomaEnum } from "src/enum/idioma.enum";
-import { Professor } from "src/professor/professor.interface";
+import { Professor } from "./professor.interface";
 
-export interface ProfessorDocument extends Professor, Document { }
+export interface ProfessorDocument extends Professor { }
 
 export const ProfessorSchema = new Schema<ProfessorDocument>({
-    nome: { type: String, required: true },
-    email: { type: String, required: true },
-    senha: { type: String, required: true },
+    usuario: { type: Schema.Types.ObjectId, ref: "Usuario", required: true },
     idioma: { type: String, enum: Object.values(IdiomaEnum), required: true }
 }, {
     timestamps: true,

@@ -3,7 +3,11 @@ import { FrequenciaEnum } from "src/enum/frequencia.enum";
 import { TagEnum } from "src/enum/tag.enum";
 import { Professor } from "src/professor/professor.interface";
 
-export class TurmaCreateViewModel {
+export class TurmaViewModel {
+    @IsString()
+    @IsOptional()
+    _id: string;
+
     @IsString()
     @IsNotEmpty()
     professor: Professor;
@@ -21,26 +25,5 @@ export class TurmaCreateViewModel {
     frequencia: FrequenciaEnum;
 
     @IsString()
-    observacao: string;
-}
-
-export class TurmaUpdateViewModel {
-    readonly _id: string;
-    readonly professor: Professor;
-
-    @IsString()
-    @IsOptional()
-    tag: TagEnum;
-
-    @IsString()
-    @IsOptional()
-    nome: string;
-
-    @IsString()
-    @IsOptional()
-    frequencia: FrequenciaEnum;
-
-    @IsString()
-    @IsOptional()
     observacao: string;
 }

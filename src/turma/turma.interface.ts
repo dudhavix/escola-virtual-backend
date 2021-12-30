@@ -8,4 +8,5 @@ export interface Turma {
     nome: string;
     frequencia: FrequenciaEnum;
     observacao: string;
+    _id?: string;
 }

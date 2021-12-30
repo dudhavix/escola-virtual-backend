@@ -35,7 +35,6 @@ export class AlunoRepository {
         await this.model.findByIdAndUpdate({ _id }, { $set: {status: StatusEnum.inativo} });
     }
 
-
     async update(aluno: Aluno, _id: string): Promise<void> {
         await this.model.findByIdAndUpdate({ _id }, { $set: aluno });
     }
