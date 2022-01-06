@@ -11,12 +11,4 @@ export class ProfessorRepository {
     async create(professor: Professor): Promise<void> {
         await new this.model(professor).save();
     }
-
-    async getId(_id: string): Promise<Professor> {
-        return this.model.findOne({ _id }, { senha: 0 });
-    }
-
-    async getAll(): Promise<Professor[]> {
-        return this.model.find({}, { senha: 0 });
-    }
 } 
