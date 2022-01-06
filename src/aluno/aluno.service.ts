@@ -1,8 +1,6 @@
 import { HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
 import { Professor } from "../professor/professor.interface";
 import { Turma } from "../turma/turma.interface";
-import { AlunoCreateViewModel, AlunoUpdateViewModel } from "./aluno.dto";
-import { AlunoCreateFactory, AlunoUpdateFactory } from "./aluno.factory";
 import { Aluno } from "./aluno.interface";
 import { AlunoRepository } from "./aluno.repository";
 
@@ -14,17 +12,7 @@ export class AlunoService {
         @Inject("AlunoRepository") private readonly repository: AlunoRepository,
     ){ }
 
-    async create(aluno: AlunoCreateViewModel): Promise<HttpException> {
-        try {
-            const entity = AlunoCreateFactory(aluno);
-            await this.repository.create(entity);
-            return new HttpException('Aluno criado', HttpStatus.CREATED);
-        } catch (error) {
-            this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
-        }
-    }
-
+   
     async getAll(professor: Professor): Promise<Aluno[] | HttpException> {
         try {
             var alunos = await this.repository.getAll(professor);
@@ -78,18 +66,6 @@ export class AlunoService {
         try {
             await this.repository.desativar(_id);
             return new HttpException('Aluno desativado', HttpStatus.OK);
-        } catch (error) {
-            this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
-        }
-    }
-
-    async update(aluno: AlunoUpdateViewModel): Promise<HttpException> {
-        try {
-            const { _id} = aluno;
-            const entity = AlunoUpdateFactory(aluno);
-            await this.repository.update(entity, _id);
-            return new HttpException('Aluno atualizado', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
             throw new Error("Desculpe ocorreu um erro");

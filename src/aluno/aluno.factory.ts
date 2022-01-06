@@ -1,26 +1,12 @@
 import { NivelEnum } from "../enum/nivel.enum";
-import { StatusEnum } from "../enum/status.enum";
-import { AlunoCreateViewModel, AlunoUpdateViewModel } from "./aluno.dto";
 import { AlunoEntity } from "./aluno.entity";
+import { Aluno } from "./aluno.interface";
 
-export const AlunoCreateFactory = (viewModel: AlunoCreateViewModel): AlunoEntity => {
-    var { dataNascimento, turma, telefone, email, endereco, nivelAtual, nivelMeta, nome, observacao, professor, foto } = viewModel;
-
-    var status = StatusEnum.pendente;
-    
-    nivelAtual = NivelEnum[nivelAtual];
-    nivelMeta = NivelEnum[nivelMeta];
-
-    return new AlunoEntity(professor, turma, nome, email, telefone, dataNascimento, endereco, observacao, foto, nivelAtual, nivelMeta, status)
-}
-
-export const AlunoUpdateFactory = (viewModel: AlunoUpdateViewModel): AlunoEntity => {
-    var { dataNascimento, turma, telefone, email, endereco, nivelAtual, nivelMeta, nome, observacao, professor, foto, status } = viewModel;
-
-    status = StatusEnum[status];
+export const AlunoFactory = (viewModel: Aluno): AlunoEntity => {
+    var { usuario, professor, turma, endereco, observacao, nivelAtual, nivelMeta  } = viewModel;
 
     nivelAtual = NivelEnum[nivelAtual];
     nivelMeta = NivelEnum[nivelMeta];
 
-    return new AlunoEntity(professor, turma, nome, email, telefone, dataNascimento, endereco, observacao, foto, nivelAtual, nivelMeta, status);
+    return new AlunoEntity(usuario, professor, turma, endereco, observacao, nivelAtual, nivelMeta);
 }

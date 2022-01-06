@@ -1,8 +1,8 @@
 import { IdiomaEnum } from "../enum/idioma.enum";
+import { Usuario } from "../usuario/usuario.interface";
 
 export interface Professor {
-    nome: string;
-    email: string;
-    senha: string;
+    usuario: Usuario;
     idioma: IdiomaEnum;
+    _id?: string;
 }
