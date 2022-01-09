@@ -4,13 +4,14 @@ import { AlunoRepository } from "../aluno/aluno.repository";
 import { IdiomaEnum } from "../enum/idioma.enum";
 import { ProfessorRepository } from "../professor/professor.repository";
 import { Resposta } from "../helpers/resposta.interface";
-import { AlunoViewModel, LoginViewModel, ProfessorViewModel } from "./usuario.dto";
+import { AlunoViewModel, LoginViewModel, ProfessorViewModel, UsuarioViewModel } from "./usuario.dto";
 import { UsuarioFactory } from "./usuario.factory";
 import { UsuarioRepository } from "./usuario.repository";
 import { StatusEnum } from "../enum/status.enum";
 import { MensagemHelper } from "../helpers/mensagens.helper";
 import { compareSync } from "bcrypt";
 import { NivelAcessoEnum } from "../enum/nivel-acesso.enum";
+import { Usuario } from "./usuario.interface";
 
 @Injectable()
 export class UsuarioService {
@@ -114,15 +115,29 @@ export class UsuarioService {
         }
     }
 
-    // async update(usuario: Usuario): Promise<void> {
-    //     try {
-    //         const entity = UsuarioFactory(usuario);
-    //         await this.repository.update(entity);
-    //     } catch (error) {
-    //         this.logger.error(error);
-    //         throw new BadRequestException("Desculpe ocorreu um erro");
-    //     }
-    // }
+    async getEmail(email: string): Promise<Usuario> {
+        try {
+            return this.usuarioRepository.getEmail(email); 
+        } catch (error) {
+            this.logger.error(error);
+            throw new BadRequestException("Desculpe ocorreu um erro");
+        }
+    }
+
+    async update(editUsuario: UsuarioViewModel): Promise<Resposta> {
+        try {
+            console.log(editUsuario);
+            
+            const usuarioEntity = UsuarioFactory(editUsuario);
+            console.log(usuarioEntity);
+            
+            await this.usuarioRepository.update(usuarioEntity);
+            return { menssagem: "Usuário atualizado", status: HttpStatus.OK };
+        } catch (error) {
+            this.logger.error(error);
+            throw new BadRequestException("Desculpe ocorreu um erro");
+        }
+    }
 
     // async delete(_id: string): Promise<void> {
     //     try {

@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString, Matches } from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional, IsString, Matches } from "class-validator";
 import { IdiomaEnum } from "src/enum/idioma.enum";
 import { Arquivo } from "../arquivo/arquivo.interface";
 import { NivelAcessoEnum } from "../enum/nivel-acesso.enum";
@@ -41,6 +41,10 @@ export class ProfessorViewModel {
 }
 
 export class AlunoViewModel {
+    @IsString()
+    @IsOptional()
+    _id: string;
+
     @IsString()
     @IsNotEmpty()
     nome: string;
@@ -98,4 +102,37 @@ export class LoginViewModel {
     @IsString()
     @IsNotEmpty({message: MensagemHelper.CAMPO_VAZIO_INVALIDO("senha")})
     senha: string;
+}
+
+export class UsuarioViewModel {
+    @IsString()
+    @IsOptional()
+    _id: string;
+
+    @IsString()
+    @IsNotEmpty()
+    nome: string;
+
+    @IsEmail()
+    @IsNotEmpty()
+    email: string;
+
+    @IsString()
+    @IsNotEmpty()
+    senha: string;
+
+    @IsString()
+    @IsNotEmpty()
+    telefone: string;
+
+    @IsString()
+    @IsNotEmpty()
+    dataNascimento: string;
+
+    @IsNotEmpty()
+    foto: Arquivo;
+
+    @IsString()
+    @IsNotEmpty()
+    nivelAcesso: NivelAcessoEnum;
 }

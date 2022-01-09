@@ -16,7 +16,7 @@ export class UsuarioRepository {
     }
 
     async getEmail(email: string): Promise<Usuario> {
-        return this.model.findOne({ email });
+        return this.model.findOne({ email, status: StatusEnum.ativo});
     }
 
     async getId(_id: string): Promise<Usuario> {
@@ -31,8 +31,8 @@ export class UsuarioRepository {
         await this.model.findOneAndUpdate({ _id }, { $set: {status: StatusEnum.inativo} });
     }
 
-    async update(usuario: Usuario): Promise<void> {
-        await this.model.findByIdAndUpdate({ _id: usuario._id }, { $set: usuario });
+    async update(usuario: Usuario): Promise<Usuario> {
+        return this.model.findByIdAndUpdate({ _id: usuario._id }, { $set: usuario });
     }
 
     async delete(_id: string): Promise<void> {

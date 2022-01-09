@@ -1,6 +1,12 @@
+import { AlunoController } from './aluno/aluno.controller';
+import { AuthService } from './auth/auth.service';
+import { AuthController } from './auth/auth.controller';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { JwtModule } from '@nestjs/jwt';
+import { LocalStrategy } from './auth/estrategia/local.strategy';
+import { JwtStrategy } from './auth/estrategia/jwt.strategy';
 
 import { AgendamentoSchema } from './agendamento/agendamento.schema';
 import { AgendamentoController } from './agendamento/agendamento.controller';
@@ -58,10 +64,16 @@ import { UsuarioController } from './usuario/usuario.controller';
 import { UsuarioService } from './usuario/usuario.service';
 import { UsuarioSchema } from './usuario/usuario.schema';
 import { UsuarioRepository } from './usuario/usuario.repository';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
     imports: [
         ConfigModule.forRoot(),
+        PassportModule,
+        JwtModule.register({
+            privateKey: process.env.SECRET,
+            signOptions: { expiresIn: "24h" }
+        }),
         MongooseModule.forRoot(`${process.env.BD_URL}`, { useNewUrlParser: true, useUnifiedTopology: true }),
         MongooseModule.forFeature([{ name: 'Agendamento', schema: AgendamentoSchema }]),
         MongooseModule.forFeature([{ name: 'Aluno', schema: AlunoSchema }]),
@@ -78,8 +90,10 @@ import { UsuarioRepository } from './usuario/usuario.repository';
     ],
     controllers: [
         AgendamentoController,
+        AlunoController,
         ArquivoController,
         AulaController,
+        AuthController,
         GramaticaController,
         PautaController,
         TarefaController,
@@ -89,6 +103,8 @@ import { UsuarioRepository } from './usuario/usuario.repository';
         UsuarioController,
     ],
     providers: [
+        LocalStrategy,
+        JwtStrategy,
         AgendamentoService,
         { provide: "AgendamentoRepository", useClass: AgendamentoRepository },
 
@@ -100,6 +116,8 @@ import { UsuarioRepository } from './usuario/usuario.repository';
 
         AulaService,
         { provide: "AulaRepository", useClass: AulaRepository },
+
+        AuthService,
 
         GramaticaService,
         { provide: "GramaticaRepository", useClass: GramaticaRepository },

@@ -27,8 +27,8 @@ export class AlunoRepository {
         return this.model.findOne({ _id });
     }
 
-    async update(aluno: Aluno, _id: string): Promise<void> {
-        await this.model.findByIdAndUpdate({ _id }, { $set: aluno });
+    async update(aluno: Aluno): Promise<void> {
+        await this.model.findByIdAndUpdate({ _id: aluno._id }, { $set: aluno });
     }
 
     async delete(_id: string): Promise<void> {

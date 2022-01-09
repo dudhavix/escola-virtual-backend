@@ -11,4 +11,5 @@ export const MensagemHelper = {
     USUARIO_NAO_AUTORIZADO: "Usuário não autorizado",
     USUARIO_ATIVIDO: "Usuário ativado",
     USUARIO_DESATIVADO: "Usuário desativado",
+    EMAIL_OU_SENHA_INVALIDO: "Email ou senha incorretos"
 };
