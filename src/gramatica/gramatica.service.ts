@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
+import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
 import { GramaticaCreateViewModel, GramaticaUpdateViewModel } from "./gramatica.dto";
 import { GramaticaFactory } from "./gramatica.factory";
 import { Gramatica } from "./gramatica.interface";
@@ -19,7 +19,7 @@ export class GramaticaService {
             return new HttpException('Gramática criada', HttpStatus.CREATED);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -32,7 +32,7 @@ export class GramaticaService {
             return gramaticas;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -45,7 +45,7 @@ export class GramaticaService {
             return gramatica;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -57,7 +57,7 @@ export class GramaticaService {
             return new HttpException('Gramática atualizada', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -67,7 +67,7 @@ export class GramaticaService {
             return new HttpException('Gramática excluida', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 }

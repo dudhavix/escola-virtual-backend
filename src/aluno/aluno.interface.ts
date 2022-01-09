@@ -11,4 +11,5 @@ export interface Aluno {
     observacao: string;
     nivelAtual: NivelEnum;
     nivelMeta: NivelEnum;
+    _id?: string;
 }

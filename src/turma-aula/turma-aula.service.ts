@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
+import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
 import { Aula } from "../aula/aula.interface";
 import { Turma } from "../turma/turma.interface";
 import { TurmaAulaCreateViewModel, TurmaAulaUpdateViewModel } from "./turma-aula.dto";
@@ -22,7 +22,7 @@ export class TurmaAulaService {
             return new HttpException('Turma e aula vinculadas', HttpStatus.CREATED);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -36,7 +36,7 @@ export class TurmaAulaService {
             return aulas;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -50,7 +50,7 @@ export class TurmaAulaService {
             return aulas;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -63,7 +63,7 @@ export class TurmaAulaService {
             return turmaAula;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -76,7 +76,7 @@ export class TurmaAulaService {
             return turmaAula;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -88,7 +88,7 @@ export class TurmaAulaService {
             return new HttpException('Vinculo atualizado', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -98,7 +98,7 @@ export class TurmaAulaService {
             return new HttpException('Vinculo excluido', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 }

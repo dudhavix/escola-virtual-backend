@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
+import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
 import { Professor } from "../professor/professor.interface";
 import { AulaCreateViewModel, AulaUpdateViewModel } from "./aula.dto";
 import { AulaFactory } from "./aula.factory";
@@ -21,7 +21,7 @@ export class AulaService {
             return new HttpException('Aula criada', HttpStatus.CREATED);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -34,7 +34,7 @@ export class AulaService {
             return aulas;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -47,7 +47,7 @@ export class AulaService {
             return aula;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -59,7 +59,7 @@ export class AulaService {
             return new HttpException('Aula atualizada', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -69,7 +69,7 @@ export class AulaService {
             return new HttpException('Aula excluida', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 }

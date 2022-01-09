@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
+import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
 import { Professor } from "../professor/professor.interface";
 import { Turma } from "../turma/turma.interface";
 import { Aluno } from "./aluno.interface";
@@ -22,7 +22,7 @@ export class AlunoService {
             return alunos;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -35,7 +35,7 @@ export class AlunoService {
             return alunos;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -48,27 +48,7 @@ export class AlunoService {
             return aluno;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
-        }
-    }
-
-    async ativar(_id: string): Promise<HttpException> {
-        try {
-            await this.repository.ativar(_id);
-            return new HttpException('Aluno ativado', HttpStatus.OK);
-        } catch (error) {
-            this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
-        }
-    }
-
-    async desativar(_id: string): Promise<HttpException> {
-        try {
-            await this.repository.desativar(_id);
-            return new HttpException('Aluno desativado', HttpStatus.OK);
-        } catch (error) {
-            this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -78,7 +58,7 @@ export class AlunoService {
             return new HttpException('Aluno excluido', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 }

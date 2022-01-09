@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
+import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
 import { Professor } from "../professor/professor.interface";
 import { AgendamentoCreateViewModel, AgendamentoUpdateViewModel } from "./agendamento.dto";
 import { AgendamentoFactory } from "./agendamento.factory";
@@ -20,7 +20,7 @@ export class AgendamentoService {
             return new HttpException('Agendamento criado', HttpStatus.CREATED);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -33,7 +33,7 @@ export class AgendamentoService {
             return agendamentos;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -46,7 +46,7 @@ export class AgendamentoService {
             return agendamento;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -58,7 +58,7 @@ export class AgendamentoService {
             return new HttpException('Reagendamento realizado', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -68,7 +68,7 @@ export class AgendamentoService {
             return new HttpException('Agendamento excluido', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 }

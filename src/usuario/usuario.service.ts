@@ -1,13 +1,16 @@
-import { HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
+import { BadRequestException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
 import { AlunoFactory } from "../aluno/aluno.factory";
 import { AlunoRepository } from "../aluno/aluno.repository";
 import { IdiomaEnum } from "../enum/idioma.enum";
 import { ProfessorRepository } from "../professor/professor.repository";
 import { Resposta } from "../helpers/resposta.interface";
-import { AlunoViewModel, ProfessorViewModel } from "./usuario.dto";
+import { AlunoViewModel, LoginViewModel, ProfessorViewModel } from "./usuario.dto";
 import { UsuarioFactory } from "./usuario.factory";
-import { Usuario } from "./usuario.interface";
 import { UsuarioRepository } from "./usuario.repository";
+import { StatusEnum } from "../enum/status.enum";
+import { MensagemHelper } from "../helpers/mensagens.helper";
+import { compareSync } from "bcrypt";
+import { NivelAcessoEnum } from "../enum/nivel-acesso.enum";
 
 @Injectable()
 export class UsuarioService {
@@ -28,7 +31,7 @@ export class UsuarioService {
             return { menssagem: "Professor criado", status: HttpStatus.CREATED }
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
     
@@ -49,32 +52,67 @@ export class UsuarioService {
             return { menssagem: "Aluno criado", status: HttpStatus.CREATED };
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
-        }
-    }
-    
-    async getEmail(email: string): Promise<Usuario> {
-        try {
-            const usuario = await this.usuarioRepository.getEmail(email);
-            if (usuario) {
-                return usuario;
-            }
-            this.logger.warn("Usuário não encontrado ou não esta ativo");
-            return null;
-        } catch (error) {
-            this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
-    // async ativar(_id: string): Promise<void> {
-    //     try {
-    //         await this.repository.ativar(_id);
-    //     } catch (error) {
-    //         this.logger.error(error);
-    //         throw new Error("Desculpe ocorreu um erro");
-    //     }
-    // }
+    async login(usuario: LoginViewModel): Promise<Resposta>{
+        try {
+            const usuarioEncontrado = await this.usuarioRepository.getEmail(usuario.email);
+            
+            if(!usuarioEncontrado ){
+                return { status: HttpStatus.NOT_FOUND, menssagem: MensagemHelper.EMAIL_INCORRETO}; 
+            }
+            
+            const isSenhaValid = compareSync(usuario.senha, usuarioEncontrado.senha)
+
+            if(!isSenhaValid ){
+                return { status: HttpStatus.NOT_FOUND, menssagem: MensagemHelper.SENHA_INCORRETA}; 
+            }
+
+            if(usuarioEncontrado.status != StatusEnum.ativo){
+                return { status: HttpStatus.NOT_FOUND, menssagem: MensagemHelper.STATUS_INCORRETO(usuarioEncontrado.status) }; 
+            }
+            
+            return { status: HttpStatus.OK, menssagem: usuarioEncontrado._id};
+            
+        } catch (error) {
+            this.logger.error(error);
+            throw new BadRequestException("Desculpe ocorreu um erro");
+        }
+    }
+    
+    async validToken(_id: string, nivelAcesso: NivelAcessoEnum): Promise<void> {
+        try {
+            const usuario = await this.usuarioRepository.getId(_id)
+            if(!usuario || nivelAcesso !== usuario.nivelAcesso){
+                throw new BadRequestException(`${_id} ${MensagemHelper.USUARIO_NAO_AUTORIZADO}.`);
+            }
+        } catch (error) {
+            this.logger.error(error);
+            throw new BadRequestException(`${MensagemHelper.USUARIO_NAO_AUTORIZADO}`);
+        }
+    }
+
+    async ativar(_id: string): Promise<Resposta> {
+        try {
+            await this.usuarioRepository.ativar(_id);
+            return { status: HttpStatus.OK, menssagem: MensagemHelper.USUARIO_ATIVIDO }
+        } catch (error) {
+            this.logger.error(error);
+            throw new BadRequestException("Desculpe ocorreu um erro");
+        }
+    }
+    
+    async desativar(_id: string): Promise<Resposta> {
+        try {
+            await this.usuarioRepository.desativar(_id);
+            return { status: HttpStatus.OK, menssagem: MensagemHelper.USUARIO_DESATIVADO }
+        } catch (error) {
+            this.logger.error(error);
+            throw new BadRequestException("Desculpe ocorreu um erro");
+        }
+    }
 
     // async update(usuario: Usuario): Promise<void> {
     //     try {
@@ -82,7 +120,7 @@ export class UsuarioService {
     //         await this.repository.update(entity);
     //     } catch (error) {
     //         this.logger.error(error);
-    //         throw new Error("Desculpe ocorreu um erro");
+    //         throw new BadRequestException("Desculpe ocorreu um erro");
     //     }
     // }
 
@@ -91,7 +129,7 @@ export class UsuarioService {
     //         await this.repository.delete(_id);
     //     } catch (error) {
     //         this.logger.error(error);
-    //         throw new Error("Desculpe ocorreu um erro");
+    //         throw new BadRequestException("Desculpe ocorreu um erro");
     //     }
     // }
 }

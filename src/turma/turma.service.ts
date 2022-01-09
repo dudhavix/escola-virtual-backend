@@ -1,9 +1,10 @@
-import { HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
+import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
 import { TurmaCreateViewModel, TurmaUpdateViewModel } from "src/turma/turma.dto";
 import { TurmaFactory } from "./turma.factory";
 import { Professor } from "../professor/professor.interface";
 import { Turma } from "./turma.interface";
 import { TurmaRepository } from "./turma.repository";
+import { Resposta } from "../helpers/resposta.interface";
 
 @Injectable()
 export class TurmaService {
@@ -14,14 +15,14 @@ export class TurmaService {
         @Inject("TurmaRepository") private readonly repository: TurmaRepository,
     ){ }
 
-    async create(turma: TurmaCreateViewModel): Promise<HttpException> {
+    async create(turma: TurmaCreateViewModel): Promise<Resposta> {
         try {
             const entity = TurmaFactory(turma);
             await this.repository.create(entity);
-            return new HttpException('Turma criada', HttpStatus.CREATED);
+            return { menssagem: "Turma criada.", status: HttpStatus.CREATED }
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -34,7 +35,7 @@ export class TurmaService {
             return turmas;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -47,7 +48,7 @@ export class TurmaService {
             return turma;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -59,7 +60,7 @@ export class TurmaService {
             return new HttpException('Turma atualizada', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -69,7 +70,7 @@ export class TurmaService {
             return new HttpException('Turma excluida', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 }

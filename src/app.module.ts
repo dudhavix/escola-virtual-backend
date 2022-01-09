@@ -97,7 +97,7 @@ import { UsuarioRepository } from './usuario/usuario.repository';
 
         ArquivoService,
         { provide: "ArquivoRepository", useClass: ArquivoRepository },
-        
+
         AulaService,
         { provide: "AulaRepository", useClass: AulaRepository },
 
@@ -117,10 +117,10 @@ import { UsuarioRepository } from './usuario/usuario.repository';
 
         TurmaService,
         { provide: "TurmaRepository", useClass: TurmaRepository },
-        
+
         TurmaAulaService,
         { provide: "TurmaAulaRepository", useClass: TurmaAulaRepository },
-        
+
         UsuarioService,
         { provide: "UsuarioRepository", useClass: UsuarioRepository }
     ],

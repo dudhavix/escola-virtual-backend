@@ -1,8 +1,8 @@
-import { Document, Schema } from "mongoose";
+import { Schema } from "mongoose";
 import { NivelEnum } from "src/enum/nivel.enum";
 import { Aluno } from "src/aluno/aluno.interface";
 
-export interface AlunoDocument extends Aluno, Document { }
+export interface AlunoDocument extends Aluno { }
 
 export const AlunoSchema = new Schema<AlunoDocument>({
     usuario: { type: Schema.Types.ObjectId, ref: "Usuario", required: true },

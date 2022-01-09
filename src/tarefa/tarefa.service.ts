@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
+import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
 import { TarefaCreateViewModel, TarefaUpdateViewModel } from "./tarefa.dto";
 import { TarefaFactory } from "./tarefa.factory";
 import { Tarefa } from "./tarefa.interface";
@@ -19,7 +19,7 @@ export class TarefaService {
             return new HttpException('Tarefa criada', HttpStatus.CREATED);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -32,7 +32,7 @@ export class TarefaService {
             return tarefas;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -45,7 +45,7 @@ export class TarefaService {
             return tarefa;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -57,7 +57,7 @@ export class TarefaService {
             return new HttpException('Tarefa atualizada', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -67,7 +67,7 @@ export class TarefaService {
             return new HttpException('Tarefa excluida', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 }

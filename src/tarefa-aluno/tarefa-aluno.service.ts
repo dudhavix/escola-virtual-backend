@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
+import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
 import { Aluno } from "../aluno/aluno.interface";
 import { StatusEnum } from "../enum/status.enum";
 import { Tarefa } from "../tarefa/tarefa.interface";
@@ -23,7 +23,7 @@ export class TarefaAlunoService {
             return new HttpException('Tarefa e aluno vinculados', HttpStatus.CREATED);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -37,7 +37,7 @@ export class TarefaAlunoService {
             return alunos;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -51,7 +51,7 @@ export class TarefaAlunoService {
             return tarefas;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -64,7 +64,7 @@ export class TarefaAlunoService {
             return tarefaAula;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -77,7 +77,7 @@ export class TarefaAlunoService {
             return tarefaAula;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -89,7 +89,7 @@ export class TarefaAlunoService {
             return new HttpException('O status da tarefa foi atualizado', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -99,7 +99,7 @@ export class TarefaAlunoService {
             return new HttpException('Vinculo excluido', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 }

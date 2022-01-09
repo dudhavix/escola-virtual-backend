@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
+import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
 import { ArquivoRepository } from "./arquivo.repository";
 import * as path from "path";
 import * as fs from "fs";
@@ -23,7 +23,7 @@ export class ArquivoService {
             return new HttpException('Arquivo salvo com sucesso', HttpStatus.CREATED);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -36,7 +36,7 @@ export class ArquivoService {
             return arquivos;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -49,7 +49,7 @@ export class ArquivoService {
             return arquivo;
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 
@@ -58,13 +58,13 @@ export class ArquivoService {
             const arquivo = await this.repository.getId(_id);
             const file = path.join("public", `${arquivo.caminho}`);
             fs.unlink(file, function (err){
-                if (err) throw new Error("Desculpe ocorreu um erro");
+                if (err) throw new BadRequestException("Desculpe ocorreu um erro");
             })
             await this.repository.delete(_id);
             return new HttpException('Arquivo excluido', HttpStatus.OK);
         } catch (error) {
             this.logger.error(error);
-            throw new Error("Desculpe ocorreu um erro");
+            throw new BadRequestException("Desculpe ocorreu um erro");
         }
     }
 

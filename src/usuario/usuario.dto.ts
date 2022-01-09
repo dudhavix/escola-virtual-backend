@@ -1,8 +1,9 @@
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { IsEmail, IsNotEmpty, IsString, Matches } from "class-validator";
 import { IdiomaEnum } from "src/enum/idioma.enum";
 import { Arquivo } from "../arquivo/arquivo.interface";
 import { NivelAcessoEnum } from "../enum/nivel-acesso.enum";
 import { NivelEnum } from "../enum/nivel.enum";
+import { MensagemHelper } from "../helpers/mensagens.helper";
 import { Professor } from "../professor/professor.interface";
 import { Turma } from "../turma/turma.interface";
 
@@ -87,4 +88,14 @@ export class AlunoViewModel {
     @IsString()
     @IsNotEmpty()
     nivelMeta: NivelEnum;
+}
+
+export class LoginViewModel {
+    @IsEmail({},{message: MensagemHelper.EMAIL_VALIDO})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_VAZIO_INVALIDO("email")})
+    email: string;
+
+    @IsString()
+    @IsNotEmpty({message: MensagemHelper.CAMPO_VAZIO_INVALIDO("senha")})
+    senha: string;
 }
