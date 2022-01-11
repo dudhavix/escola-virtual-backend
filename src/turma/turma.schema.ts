@@ -1,9 +1,9 @@
-import { Document, Schema } from "mongoose";
+import { Schema } from "mongoose";
 import { FrequenciaEnum } from "src/enum/frequencia.enum";
 import { TagEnum } from "src/enum/tag.enum";
 import { Turma } from "src/turma/turma.interface";
 
-export interface TurmaDocument extends Turma, Document { }
+export interface TurmaDocument extends Turma { }
 
 export const TurmaSchema = new Schema<TurmaDocument>({
     professor: { type: Schema.Types.ObjectId, ref: "Professor", required: true },

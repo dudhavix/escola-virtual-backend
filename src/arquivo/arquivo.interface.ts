@@ -1,6 +1,10 @@
+import { Usuario } from "../usuario/usuario.interface";
+
 export interface Arquivo {
-    nome: string;
-    tamanho: string;
-    caminho: string;
-    formato: string;
+    usuario?: Usuario;
+    nome?: string;
+    tamanho?: string;
+    caminho?: string;
+    formato?: string;
+    _id?: string;
 }

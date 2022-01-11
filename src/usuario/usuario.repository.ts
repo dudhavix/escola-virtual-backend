@@ -20,7 +20,7 @@ export class UsuarioRepository {
     }
 
     async getId(_id: string): Promise<Usuario> {
-        return this.model.findOne({ _id, status: StatusEnum.ativo }, {senha:false});
+        return this.model.findOne({ _id }, ["nome", "email", "telefone", "dataNascimento", "foto"]);
     }
 
     async ativar(_id: string): Promise<void> {
@@ -37,5 +37,9 @@ export class UsuarioRepository {
 
     async delete(_id: string): Promise<void> {
         await this.model.findOneAndUpdate({ _id }, { $set: { status: StatusEnum.inativo } });
+    }
+
+    async validarExiste(key: string, value: string): Promise<Usuario> {
+        return this.model.findOne({ [key]: value });
     }
 }

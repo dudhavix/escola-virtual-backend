@@ -1,13 +1,9 @@
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 import { FrequenciaEnum } from "src/enum/frequencia.enum";
 import { TagEnum } from "src/enum/tag.enum";
 import { Professor } from "src/professor/professor.interface";
 
 export class TurmaCreateViewModel {
-    @IsString()
-    @IsNotEmpty()
-    professor: Professor;
-
     @IsString()
     @IsNotEmpty()
     tag: TagEnum;
@@ -27,20 +23,17 @@ export class TurmaCreateViewModel {
 export class TurmaUpdateViewModel {
     readonly _id: string;
     readonly professor: Professor;
+    readonly tag: TagEnum;
 
     @IsString()
-    @IsOptional()
-    tag: TagEnum;
-
-    @IsString()
-    @IsOptional()
+    @IsNotEmpty()
     nome: string;
 
     @IsString()
-    @IsOptional()
+    @IsNotEmpty()
     frequencia: FrequenciaEnum;
 
     @IsString()
-    @IsOptional()
+    @IsNotEmpty()
     observacao: string;
 }

@@ -8,8 +8,15 @@ export interface Usuario {
     telefone: string;
     dataNascimento: string;
     foto: Arquivo;
-    nivelAcesso: NivelAcessoEnum;
+    nivelAcesso?: NivelAcessoEnum;
     senha?: string;
     status?: StatusEnum;
     _id?: string;
+}
+
+export interface Token {
+    user: {
+        nivelAcesso: NivelAcessoEnum;
+        _id: Usuario;
+    }
 }

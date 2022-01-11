@@ -7,7 +7,7 @@ import { MensagemHelper } from "../helpers/mensagens.helper";
 import { Professor } from "../professor/professor.interface";
 import { Turma } from "../turma/turma.interface";
 
-export class ProfessorViewModel {
+export class UsuarioProfessorViewModel {
     @IsString()
     @IsNotEmpty()
     nome: string;
@@ -40,10 +40,13 @@ export class ProfessorViewModel {
     idioma: IdiomaEnum;
 }
 
-export class AlunoViewModel {
+export class UsuarioAlunoViewModel {
     @IsString()
     @IsOptional()
     _id: string;
+
+    @IsOptional()
+    professor: Professor;
 
     @IsString()
     @IsNotEmpty()
@@ -71,9 +74,6 @@ export class AlunoViewModel {
     @IsString()
     @IsNotEmpty()
     nivelAcesso: NivelAcessoEnum;
-
-    @IsNotEmpty()
-    professor: Professor;
 
     @IsNotEmpty()
     turma: Turma;
@@ -135,4 +135,29 @@ export class UsuarioViewModel {
     @IsString()
     @IsNotEmpty()
     nivelAcesso: NivelAcessoEnum;
+}
+
+export class UsuarioUpdateViewModel {
+    @IsString()
+    @IsNotEmpty()
+    _id: string;
+
+    @IsString()
+    @IsNotEmpty()
+    nome: string;
+
+    @IsEmail()
+    @IsNotEmpty()
+    email: string;
+
+    @IsString()
+    @IsNotEmpty()
+    telefone: string;
+
+    @IsString()
+    @IsNotEmpty()
+    dataNascimento: string;
+
+    @IsNotEmpty()
+    foto: Arquivo;
 }

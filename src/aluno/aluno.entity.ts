@@ -3,7 +3,7 @@ import { Professor } from "../professor/professor.interface";
 import { Turma } from "../turma/turma.interface";
 import { Usuario } from "../usuario/usuario.interface";
 
-export class AlunoEntity {
+export class AlunoCreateEntity {
     constructor(
         public usuario: Usuario,
         public professor: Professor,
@@ -12,5 +12,16 @@ export class AlunoEntity {
         public observacao: string,
         public nivelAtual: NivelEnum,
         public nivelMeta: NivelEnum,
+    ) { }
+}
+
+export class AlunoUpdateEntity {
+    constructor(
+        public turma: Turma,
+        public endereco: string,
+        public observacao: string,
+        public nivelAtual: NivelEnum,
+        public nivelMeta: NivelEnum,
+        public _id: string,
     ) { }
 }

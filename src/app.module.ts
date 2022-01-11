@@ -1,3 +1,4 @@
+import { ProfessorService } from './professor/professor.service';
 import { AlunoController } from './aluno/aluno.controller';
 import { AuthService } from './auth/auth.service';
 import { AuthController } from './auth/auth.controller';
@@ -72,7 +73,7 @@ import { PassportModule } from '@nestjs/passport';
         PassportModule,
         JwtModule.register({
             privateKey: process.env.SECRET,
-            signOptions: { expiresIn: "24h" }
+            signOptions: { expiresIn: "7d" }
         }),
         MongooseModule.forRoot(`${process.env.BD_URL}`, { useNewUrlParser: true, useUnifiedTopology: true }),
         MongooseModule.forFeature([{ name: 'Agendamento', schema: AgendamentoSchema }]),
@@ -103,6 +104,7 @@ import { PassportModule } from '@nestjs/passport';
         UsuarioController,
     ],
     providers: [
+        ProfessorService,
         LocalStrategy,
         JwtStrategy,
         AgendamentoService,

@@ -15,3 +15,14 @@ export class UsuarioEntity {
         public _id?: string,
     ) { }
 }
+
+export class UsuarioEditEntity {
+    constructor(
+        public nome: string,
+        public email: string,
+        public telefone: string,
+        public dataNascimento: string,
+        public foto: Arquivo,
+        public _id: string,
+    ) { }
+}

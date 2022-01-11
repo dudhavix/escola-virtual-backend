@@ -4,12 +4,12 @@ import { Turma } from "../turma/turma.interface";
 import { Usuario } from "../usuario/usuario.interface";
 
 export interface Aluno {
-    usuario: Usuario;
-    professor: Professor;
-    turma: Turma;
-    endereco: string;
-    observacao: string;
-    nivelAtual: NivelEnum;
-    nivelMeta: NivelEnum;
+    usuario?: Usuario;
+    turma?: Turma;
+    endereco?: string;
+    observacao?: string;
+    nivelAtual?: NivelEnum;
+    nivelMeta?: NivelEnum;
+    professor?: Professor;
     _id?: string;
 }

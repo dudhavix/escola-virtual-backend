@@ -1,11 +1,14 @@
-import { Body, Controller, Delete, Get, Headers, HttpException, HttpStatus, Param, Post, Put, Req, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Headers, HttpException, HttpStatus, Param, Post, Put, Req, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
 import { TurmaService } from "src/turma/turma.service";
+import { NivelAcessoGuard } from "../auth/estrategia/nivelacesso.guard";
 import { NivelAcessoEnum } from "../enum/nivel-acesso.enum";
+import { NivelAcessoDecorator } from "../helpers/nivel-acesso.decorator";
 import { Resposta } from "../helpers/resposta.interface";
 import { UsuarioService } from "../usuario/usuario.service";
 import { TurmaCreateViewModel, TurmaUpdateViewModel } from "./turma.dto";
 
-
+@UseGuards(AuthGuard("jwt"), NivelAcessoGuard)
 @Controller("api/turma")
 export class TurmaController {
 
@@ -14,48 +17,52 @@ export class TurmaController {
         private readonly usuarioService: UsuarioService
     ) { }
 
+    @NivelAcessoDecorator(NivelAcessoEnum.professor)
     @Post("/create")
     @UsePipes(ValidationPipe)
     async create(
-        @Headers() { token },
+        @Req() req: any,
         @Body() turma: TurmaCreateViewModel
     ): Promise<Resposta> {
-        await this.usuarioService.validToken(token, NivelAcessoEnum.professor);
-        return this.turmaService.create(turma);
+        const professor = req.user._id;
+        return this.turmaService.create(turma, professor);
     }
 
+    @NivelAcessoDecorator(NivelAcessoEnum.professor)
     @Get("/getAll")
     async getAll(
-        @Headers() { token },
+        @Req() req: any,
     ): Promise<any> {
-        await this.usuarioService.validToken(token, NivelAcessoEnum.professor);
-        return this.turmaService.getAll(token);
+        const professor = req.user._id;
+        return this.turmaService.getAll(professor);
     }
 
+    @NivelAcessoDecorator(NivelAcessoEnum.professor)
     @Get("/getId/:turma")
     async getId(
-        @Headers() { token },
+        @Req() req: any,
         @Param("turma") turma: string
     ): Promise<any> {
-        await this.usuarioService.validToken(token, NivelAcessoEnum.professor);
-        return this.turmaService.getId(turma);
+        const professor = req.user._id;
+        return this.turmaService.getId(turma, professor);
     }
 
+    @NivelAcessoDecorator(NivelAcessoEnum.professor)
     @Put("/update")
     async update(
-        @Headers() { token },
+        @Req() req: any,
         @Body() turma: TurmaUpdateViewModel
-    ): Promise<HttpException> {
-        await this.usuarioService.validToken(token, NivelAcessoEnum.professor);
-        return this.turmaService.update(turma);
+    ): Promise<Resposta> {
+        const professor = req.user._id;
+        return this.turmaService.update(turma, professor);
     }
 
     @Delete("/delete/:turma")
     async delete(
-        @Headers() { token },
+        @Req() req: any,
         @Param("turma") turma: string
-    ): Promise<HttpException> {
-        await this.usuarioService.validToken(token, NivelAcessoEnum.professor);
-        return this.turmaService.delete(turma);
+    ): Promise<any> {
+        const professor = req.user._id;
+        return this.turmaService.delete(turma, professor);
     }
 }
