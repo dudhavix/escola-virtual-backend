@@ -1,74 +1,55 @@
-import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
+import { HttpStatus, Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { EmitirMensagemHelper } from "../helpers/emitirMensagem.helper";
+import { MensagemHelper } from "../helpers/mensagens.helper";
+import { Resposta } from "../helpers/resposta.interface";
 import { Professor } from "../professor/professor.interface";
 import { AgendamentoCreateViewModel, AgendamentoUpdateViewModel } from "./agendamento.dto";
-import { AgendamentoFactory } from "./agendamento.factory";
+import { AgendamentoCreateFactory, AgendamentoRemarcarFactory } from "./agendamento.factory";
 import { Agendamento } from "./agendamento.interface";
 import { AgendamentoRepository } from "./agendamento.repository";
 
 @Injectable()
 export class AgendamentoService {
+
     private logger = new Logger(AgendamentoService.name);
 
     constructor(
         @Inject("AgendamentoRepository") private readonly repository: AgendamentoRepository,
-    ){ }
+    ) { }
 
-    async create(agendamento: AgendamentoCreateViewModel): Promise<HttpException> {
-        try {
-            const entity = AgendamentoFactory(agendamento);
-            await this.repository.create(entity);
-            return new HttpException('Agendamento criado', HttpStatus.CREATED);
-        } catch (error) {
-            this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
-        }
+    async create(agendamento: AgendamentoCreateViewModel, professor: Professor): Promise<Resposta> {
+        const entity = AgendamentoCreateFactory(agendamento, professor);
+        await this.repository.create(entity);
+        return { status: HttpStatus.CREATED, menssagem: MensagemHelper.CRIADO_SUCESSO }
     }
 
-    async getAll(professor: Professor): Promise<Agendamento[] | HttpException> {
-        try {
-            var agendamentos = await this.repository.getAll(professor);
-            if (!agendamentos.length) {
-                return new HttpException('Nenhum agendamento encontrado', HttpStatus.NOT_FOUND);
-            }
-            return agendamentos;
-        } catch (error) {
-            this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
-        }
+    async getAll(professor: Professor): Promise<Agendamento[]> {
+        return await this.repository.getAll(professor);
     }
 
-    async getId(_id: string): Promise<Agendamento | HttpException> {
+    async getId(_id: string, professor: Professor): Promise<Agendamento> {
         try {
-            var agendamento = await this.repository.getId(_id);
-            if (!agendamento) {
-                return new HttpException('Nenhuma agendamento encontrado', HttpStatus.NOT_FOUND);
-            }
+            const agendamento = await this.repository.getId(_id, professor);
             return agendamento;
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
+            EmitirMensagemHelper(error.status)
         }
     }
 
-    async update(agendamento: AgendamentoUpdateViewModel): Promise<HttpException> {
-        try {
-            const { _id, ...info} = agendamento;
-            const entity = AgendamentoFactory(info);
-            await this.repository.update(entity, _id);
-            return new HttpException('Reagendamento realizado', HttpStatus.OK);
-        } catch (error) {
-            this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
-        }
+    async remarcar(agendamento: AgendamentoUpdateViewModel, professor: Professor): Promise<Resposta> {
+        const entity = AgendamentoRemarcarFactory(agendamento);
+        await this.repository.remarcar(entity, professor);
+        return { status: HttpStatus.OK, menssagem: MensagemHelper.ALTERACOES_REALIZADAS };
     }
 
-    async delete(_id: string): Promise<HttpException> {
-        try {
-            await this.repository.delete(_id);
-            return new HttpException('Agendamento excluido', HttpStatus.OK);
-        } catch (error) {
-            this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
-        }
+    async cancelar(_id: string, professor: Professor): Promise<Resposta> {
+        await this.repository.cancelar(_id, professor);
+        return { status: HttpStatus.OK, menssagem: MensagemHelper.ALTERACOES_REALIZADAS };
+    }
+
+    async concluir(_id: string, professor: Professor): Promise<Resposta> {
+        await this.repository.concluir(_id, professor);
+        return { status: HttpStatus.OK, menssagem: MensagemHelper.ALTERACOES_REALIZADAS };
     }
 }

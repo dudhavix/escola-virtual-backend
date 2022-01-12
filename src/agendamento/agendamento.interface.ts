@@ -1,8 +1,11 @@
+import { StatusEnum } from "../enum/status.enum";
 import { Professor } from "../professor/professor.interface";
 import { Turma } from "../turma/turma.interface";
 
 export interface Agendamento {
-    professor: Professor;
-    turma: Turma;
-    dataHora: string;
+    professor?: Professor;
+    turma?: Turma;
+    dataHora?: string;
+    status?: StatusEnum;
+    _id?: string;
 }

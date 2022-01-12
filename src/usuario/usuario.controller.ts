@@ -6,7 +6,7 @@ import { NivelAcessoEnum } from "../enum/nivel-acesso.enum";
 import { Resposta } from "../helpers/resposta.interface";
 import { UsuarioAlunoViewModel, UsuarioProfessorViewModel, UsuarioUpdateViewModel } from "./usuario.dto";
 import { UsuarioService } from "./usuario.service";
-import { Usuario } from "./usuario.interface";
+import { Token, Usuario } from "./usuario.interface";
 
 @Controller("api/usuario")
 export class UsuarioController {
@@ -26,14 +26,13 @@ export class UsuarioController {
     @Post("/create-aluno")
     @UsePipes(ValidationPipe)
     async createAluno(
-        @Req() req: any,
+        @Req() req: Token,
         @Body() usuario: UsuarioAlunoViewModel
     ): Promise<Resposta> {
         const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
         return this.usuarioService.createAluno(usuario, professor);
     }
 
-    @UseGuards(AuthGuard("jwt"), NivelAcessoGuard)
     @Put("/ativar/:usuario")
     async ativar(
         @Param("usuario") usuario: string
@@ -62,10 +61,10 @@ export class UsuarioController {
     @UseGuards(AuthGuard("jwt"))
     @Get("/perfil")
     async perfil(
-        @Req() req: any,
+        @Req() req: Token,
     ): Promise<Usuario> {
-        const usuario = req.user._id;
-        return this.usuarioService.getId(usuario);
+        const usuario = req.user._id as unknown;
+        return this.usuarioService.getId(usuario as string);
     }
 
     //APENAS PARA VISUALIZAR REMOVER DEPOIS

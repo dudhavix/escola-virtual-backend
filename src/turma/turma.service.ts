@@ -36,11 +36,7 @@ export class TurmaService {
     }
 
     async getId(_id: string, professor: Professor): Promise<Turma> {
-        var turma = await this.repository.getId(_id, professor);
-        if (!turma) {
-            throw new NotFoundException(MensagemHelper.NADA_ENCONTRADO);
-        }
-        return turma;
+        return await this.repository.getId(_id, professor);
     }
 
     async update(turma: TurmaUpdateViewModel, professor: Professor): Promise<Resposta> {
@@ -55,12 +51,7 @@ export class TurmaService {
     }
 
     async delete(_id: string, professor: Professor): Promise<Resposta> {
-        try {
-            await this.repository.delete(_id, professor);
-            return { menssagem: MensagemHelper.DELETADO_SUCESSO, status: HttpStatus.OK }
-        } catch (error) {
-            this.logger.error(error);
-            throw new BadRequestException(MensagemHelper.OPERACAO_NAO_AUTORIZADA);
-        }
+        await this.repository.delete(_id, professor);
+        return { menssagem: MensagemHelper.DELETADO_SUCESSO, status: HttpStatus.OK }
     }
 }

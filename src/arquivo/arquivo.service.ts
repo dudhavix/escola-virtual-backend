@@ -30,34 +30,34 @@ export class ArquivoService {
         }
     }
 
-    async getAll(): Promise<Arquivo[]> {
-        var arquivos = await this.repository.getAll();
+    async getAll(usuario: Usuario): Promise<Arquivo[]> {
+        var arquivos = await this.repository.getAll(usuario);
         if (!arquivos.length) {
             throw new NotFoundException(MensagemHelper.NADA_ENCONTRADO);
         }
         return arquivos;
     }
 
-    async getId(_id: string): Promise<Arquivo> {
-        var arquivo = await this.repository.getId(_id);
+    async getId(_id: string, usuario: Usuario): Promise<Arquivo> {
+        var arquivo = await this.repository.getId(_id, usuario);
         if (!arquivo) {
             throw new NotFoundException(MensagemHelper.NADA_ENCONTRADO);
         }
         return arquivo;
     }
 
-    async delete(_id: string): Promise<Resposta> {
+    async delete(_id: string, usuario: Usuario): Promise<Resposta> {
         try {
-            const arquivo = await this.repository.getId(_id);
+            const arquivo = await this.repository.getId(_id, usuario);
             const file = path.join("public", `${arquivo.caminho}`);
             fs.unlink(file, function (err) {
-                if (err) throw new BadRequestException("Desculpe ocorreu um erro");
+                if (err) throw new BadRequestException("Erro ao salvar o arquivo");
             })
-            await this.repository.delete(_id);
+            await this.repository.delete(_id, usuario);
             return { status: HttpStatus.OK, menssagem: MensagemHelper.DELETADO_SUCESSO }
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException(MensagemHelper.OCORREU_ERRO);
+            throw new BadRequestException(MensagemHelper.DELETADO_ERRO);
         }
     }
 

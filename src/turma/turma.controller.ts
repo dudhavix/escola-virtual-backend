@@ -5,6 +5,7 @@ import { NivelAcessoGuard } from "../auth/estrategia/nivelacesso.guard";
 import { NivelAcessoEnum } from "../enum/nivel-acesso.enum";
 import { NivelAcessoDecorator } from "../helpers/nivel-acesso.decorator";
 import { Resposta } from "../helpers/resposta.interface";
+import { Token } from "../usuario/usuario.interface";
 import { UsuarioService } from "../usuario/usuario.service";
 import { TurmaCreateViewModel, TurmaUpdateViewModel } from "./turma.dto";
 
@@ -21,48 +22,48 @@ export class TurmaController {
     @Post("/create")
     @UsePipes(ValidationPipe)
     async create(
-        @Req() req: any,
+        @Req() req: Token,
         @Body() turma: TurmaCreateViewModel
     ): Promise<Resposta> {
-        const professor = req.user._id;
+        const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
         return this.turmaService.create(turma, professor);
     }
 
     @NivelAcessoDecorator(NivelAcessoEnum.professor)
     @Get("/getAll")
     async getAll(
-        @Req() req: any,
+        @Req() req: Token,
     ): Promise<any> {
-        const professor = req.user._id;
+        const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
         return this.turmaService.getAll(professor);
     }
 
     @NivelAcessoDecorator(NivelAcessoEnum.professor)
     @Get("/getId/:turma")
     async getId(
-        @Req() req: any,
+        @Req() req: Token,
         @Param("turma") turma: string
     ): Promise<any> {
-        const professor = req.user._id;
+        const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
         return this.turmaService.getId(turma, professor);
     }
 
     @NivelAcessoDecorator(NivelAcessoEnum.professor)
     @Put("/update")
     async update(
-        @Req() req: any,
+        @Req() req: Token,
         @Body() turma: TurmaUpdateViewModel
     ): Promise<Resposta> {
-        const professor = req.user._id;
+        const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
         return this.turmaService.update(turma, professor);
     }
 
     @Delete("/delete/:turma")
     async delete(
-        @Req() req: any,
+        @Req() req: Token,
         @Param("turma") turma: string
     ): Promise<any> {
-        const professor = req.user._id;
+        const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
         return this.turmaService.delete(turma, professor);
     }
 }

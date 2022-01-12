@@ -1,7 +1,15 @@
+import { StatusEnum } from "../enum/status.enum";
+import { Professor } from "../professor/professor.interface";
 import { AgendamentoCreateViewModel, AgendamentoUpdateViewModel } from "./agendamento.dto";
-import { AgendamentoEntity } from "./agendamento.entity";
+import { AgendamentoCreateEntity, AgendamentoUpdateEntity } from "./agendamento.entity";
 
-export const AgendamentoFactory = (viewModel: AgendamentoCreateViewModel | AgendamentoUpdateViewModel): AgendamentoEntity => {
-    var { dataHora, professor, turma } = viewModel;
-    return new AgendamentoEntity(professor, turma, dataHora);
+export const AgendamentoCreateFactory = (viewModel: AgendamentoCreateViewModel, professor: Professor): AgendamentoCreateEntity => {
+    var { dataHora, turma } = viewModel;
+    const status = StatusEnum.pendente;
+    return new AgendamentoCreateEntity(professor, turma, dataHora, status);
+}
+
+export const AgendamentoRemarcarFactory = (viewModel: AgendamentoUpdateViewModel): AgendamentoUpdateEntity => {
+    var { dataHora, _id} = viewModel;
+    return new AgendamentoUpdateEntity(dataHora, _id);
 }

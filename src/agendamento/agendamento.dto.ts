@@ -1,12 +1,8 @@
 import { IsNotEmpty, IsString } from "class-validator";
-import { Professor } from "../professor/professor.interface";
 import { Turma } from "../turma/turma.interface";
 
 export class AgendamentoCreateViewModel {
-    @IsNotEmpty()
-    professor: Professor;
-
-    @IsNotEmpty()
+    @IsNotEmpty({message: "tem que ser turma"})
     turma: Turma;
 
     @IsNotEmpty()
@@ -15,11 +11,18 @@ export class AgendamentoCreateViewModel {
 }
 
 export class AgendamentoUpdateViewModel {
+    @IsString()
+    @IsNotEmpty()
     readonly _id: string;
-    readonly professor: Professor;
+
+    @IsNotEmpty()
     readonly turma: Turma;
     
     @IsNotEmpty()
     @IsString()
     dataHora: string;
+
+    @IsString()
+    @IsNotEmpty()
+    readonly status: string;
 }
