@@ -1,6 +1,9 @@
-import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
+import { MensagemEnum } from "../enum/mensagem.enum";
+import { EmitirMensagemHelper } from "../helpers/mensagens.helper";
+import { Professor } from "../professor/professor.interface";
 import { GramaticaCreateViewModel, GramaticaUpdateViewModel } from "./gramatica.dto";
-import { GramaticaFactory } from "./gramatica.factory";
+import { GramaticaCreateFactory, GramaticaUpdateFactory } from "./gramatica.factory";
 import { Gramatica } from "./gramatica.interface";
 import { GramaticaRepository } from "./gramatica.repository";
 
@@ -12,62 +15,54 @@ export class GramaticaService {
         @Inject("GramaticaRepository") private readonly repository: GramaticaRepository,
     ){ }
 
-    async create(gramatica: GramaticaCreateViewModel): Promise<HttpException> {
+    async create(gramatica: GramaticaCreateViewModel, professor: Professor): Promise<void> {
         try {
-            const entity = GramaticaFactory(gramatica);
+            const entity = GramaticaCreateFactory(gramatica, professor);
             await this.repository.create(entity);
-            return new HttpException('Gramática criada', HttpStatus.CREATED);
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
+            EmitirMensagemHelper(MensagemEnum.CRIADO_ERRO);
         }
     }
 
-    async getAll(): Promise<Gramatica[] | HttpException> {
+    async getAll(professor: Professor): Promise<Gramatica[]> {
         try {
-            var gramaticas = await this.repository.getAll();
-            if (!gramaticas.length) {
-                return new HttpException('Nenhuma gramática encontrada', HttpStatus.NOT_FOUND);
-            }
+            var gramaticas = await this.repository.getAll(professor);
+            if (!gramaticas) EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_SUCESSO);
             return gramaticas;
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
+            EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_ERRO);
         }
     }
 
-    async getId(_id: string): Promise<Gramatica | HttpException> {
+    async getId(_id: string, professor: Professor): Promise<Gramatica> {
         try {
-            var gramatica = await this.repository.getId(_id);
-            if (!gramatica) {
-                return new HttpException('Nenhuma gramática encontrada', HttpStatus.NOT_FOUND);
-            }
+            var gramatica = await this.repository.getId(_id, professor);
+            if (!gramatica) EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_SUCESSO);
             return gramatica;
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
+            EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_ERRO);
         }
     }
 
-    async update(gramatica: GramaticaUpdateViewModel): Promise<HttpException> {
+    async update(gramatica: GramaticaUpdateViewModel, professor: Professor): Promise<void> {
         try {
-            const { _id, ...info } = gramatica;
-            const entity = GramaticaFactory(info);
-            await this.repository.update(entity, _id);
-            return new HttpException('Gramática atualizada', HttpStatus.OK);
+            const entity = GramaticaUpdateFactory(gramatica);
+            await this.repository.update(entity, professor);
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
+            EmitirMensagemHelper(MensagemEnum.ALTERACOES_ERRO)
         }
     }
 
-    async delete(_id: string): Promise<HttpException> {
+    async delete(_id: string, professor: Professor): Promise<void> {
         try {
-            await this.repository.delete(_id);
-            return new HttpException('Gramática excluida', HttpStatus.OK);
+            await this.repository.delete(_id, professor);
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
+            EmitirMensagemHelper(MensagemEnum.DELETADO_ERRO)
         }
     }
 }

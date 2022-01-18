@@ -3,17 +3,17 @@ import { AlunoCreateFactory } from "../aluno/aluno.factory";
 import { AlunoRepository } from "../aluno/aluno.repository";
 import { IdiomaEnum } from "../enum/idioma.enum";
 import { ProfessorRepository } from "../professor/professor.repository";
-import { Resposta } from "../helpers/resposta.interface";
 import { UsuarioAlunoViewModel, UsuarioProfessorViewModel, UsuarioUpdateViewModel } from "./usuario.dto";
 import { UsuarioEditFactory, UsuarioFactory } from "./usuario.factory";
 import { UsuarioRepository } from "./usuario.repository";
-import { MensagemHelper } from "../helpers/mensagens.helper";
+import { EmitirMensagemHelper, MensagemHelper } from "../helpers/mensagens.helper";
 import { Usuario } from "./usuario.interface";
 import { Professor } from "../professor/professor.interface";
 import { NivelAcessoEnum } from "../enum/nivel-acesso.enum";
 import { ProfessorService } from "../professor/professor.service";
 import { Aluno } from "../aluno/aluno.interface";
 import { AlunoService } from "../aluno/aluno.service";
+import { MensagemEnum } from "../enum/mensagem.enum";
 
 @Injectable()
 export class UsuarioService {
@@ -27,24 +27,23 @@ export class UsuarioService {
         private readonly alunoService: AlunoService,
     ) { }
 
-    async createProfessor(novoUsuario: UsuarioProfessorViewModel): Promise<Resposta> {
+    async createProfessor(novoUsuario: UsuarioProfessorViewModel): Promise<void> {
         const existeEmail = await this.validaExiste("email", novoUsuario.email);
-        if (existeEmail) throw new BadRequestException(MensagemHelper.EMAIL_EXISTE);
+        if (existeEmail) EmitirMensagemHelper(MensagemEnum.EMAIL_EXISTE);
         try {
             const usuarioEntity = UsuarioFactory(novoUsuario);
             const usuario = await this.usuarioRepository.create(usuarioEntity);
             const professorEntity = { usuario, idioma: IdiomaEnum[novoUsuario.idioma] };
             await this.professorRepository.create(professorEntity);
-            return { menssagem: "Professor criado", status: HttpStatus.CREATED }
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException(MensagemHelper.CRIADO_ERRO);
+            EmitirMensagemHelper(MensagemEnum.CRIADO_ERRO)
         }
     }
 
-    async createAluno(novoUsuario: UsuarioAlunoViewModel, professor: Professor): Promise<Resposta> {
+    async createAluno(novoUsuario: UsuarioAlunoViewModel, professor: Professor): Promise<void> {
         const existeEmail = await this.validaExiste("email", novoUsuario.email);
-        if (existeEmail) throw new BadRequestException(MensagemHelper.EMAIL_EXISTE);
+        if (existeEmail) EmitirMensagemHelper(MensagemEnum.EMAIL_EXISTE);
         try {
             const usuarioEntity = UsuarioFactory(novoUsuario);
             const usuario = await this.usuarioRepository.create(usuarioEntity);
@@ -57,65 +56,67 @@ export class UsuarioService {
                 turma: novoUsuario.turma
             }, professor)
             await this.alunoRepository.create(alunoEntity);
-            return { menssagem: MensagemHelper.CRIADO_SUCESSO, status: HttpStatus.CREATED };
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException(MensagemHelper.CRIADO_ERRO);
+            EmitirMensagemHelper(MensagemEnum.CRIADO_ERRO);
         }
     }
 
-    async ativar(_id: string): Promise<Resposta> {
+    async ativar(_id: string): Promise<void> {
         try {
             await this.usuarioRepository.ativar(_id);
-            return { status: HttpStatus.OK, menssagem: MensagemHelper.USUARIO_ATIVIDO }
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
+            EmitirMensagemHelper(MensagemEnum.OCORREU_ERRO);
         }
     }
 
-    async desativar(_id: string): Promise<Resposta> {
+    async desativar(_id: string): Promise<void> {
         try {
             await this.usuarioRepository.desativar(_id);
-            return { status: HttpStatus.OK, menssagem: MensagemHelper.USUARIO_DESATIVADO }
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
+            EmitirMensagemHelper(MensagemEnum.OCORREU_ERRO);
         }
     }
 
     async getEmail(email: string): Promise<Usuario> {
         try {
-            return this.usuarioRepository.getEmail(email);
+            const usuario = await this.usuarioRepository.getEmail(email);
+            if(!usuario) EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_SUCESSO);
+            return usuario;
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
+            EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_ERRO);
         }
     }
 
-    async update(editUsuario: UsuarioUpdateViewModel): Promise<Resposta> {
+    async update(editUsuario: UsuarioUpdateViewModel): Promise<void> {
         try {
             const usuarioEntity = UsuarioEditFactory(editUsuario);
             await this.usuarioRepository.update(usuarioEntity);
-            return { menssagem: MensagemHelper.ALTERACOES_REALIZADAS, status: HttpStatus.OK };
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
+            EmitirMensagemHelper(MensagemEnum.ALTERACOES_ERRO);
         }
     }
 
     async getId(_id: string): Promise<Usuario> {
         try {
-            return this.usuarioRepository.getId(_id);
+            const usuario = await this.usuarioRepository.getId(_id);
+            if(!usuario) EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_SUCESSO);
+            return usuario;
         } catch (error) {
             this.logger.error(error);
             throw new BadRequestException(MensagemHelper.OCORREU_ERRO);
         }
     }
 
-    async getAll(): Promise<any> {
+    async getAll(): Promise<Usuario[]> {
         try {
-            return this.professorRepository.getAll();
+            const usuarios = await this.professorRepository.getAll();
+            if(!usuarios) EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_SUCESSO);
+            return usuarios;
         } catch (error) {
             this.logger.error(error);
             throw new BadRequestException("Desculpe ocorreu um erro");

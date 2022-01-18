@@ -1,7 +1,5 @@
-import { BadRequestException, Logger } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { MensagemHelper } from "../helpers/mensagens.helper";
 import { Professor } from "../professor/professor.interface";
 import { Usuario } from "../usuario/usuario.interface";
 import { Aluno } from "./aluno.interface";
@@ -18,16 +16,19 @@ export class AlunoRepository {
     }
 
     async getAll(professor: Professor): Promise<Aluno[]> {
-        return this.model.find({professor}, ["usuario", "turma", "nivelAtual"]).populate("usuario", ["nome", "email", "foto", "status"]).populate("turma", ["tag", "nome"]);
+        const alunos = await this.model.find({professor}, ["usuario", "turma", "nivelAtual"]).populate("usuario", ["nome", "email", "foto", "status"]).populate("turma", ["tag", "nome"]);
+        if (!alunos.length) null;
+        return alunos;
     }
 
     async getId(_id: string, professor: Professor): Promise<Aluno> {
-        return this.model.findOne({ _id, professor }, ["usuario", "turma", "endereco", "observacao", "nivelAtual", "nivelMeta"]).populate("usuario", ["nome", "email", "foto", "status"]).populate("turma", ["tag", "nome"]);
+        const aluno = await this.model.findOne({ _id, professor }, ["usuario", "turma", "endereco", "observacao", "nivelAtual", "nivelMeta"]).populate("usuario", ["nome", "email", "foto", "status"]).populate("turma", ["tag", "nome"]);
+        if (!aluno) null;
+        return aluno;
     }
 
     async update(aluno: Aluno, professor: Professor): Promise<void> {
-        const update = await this.model.findOneAndUpdate({ _id: aluno._id, professor }, { $set: aluno });
-        if (!update) throw new BadRequestException("Aluno não pertence ao professor.");
+        await this.model.updateOne({ _id: aluno._id, professor }, { $set: aluno });
     }
 
     async recuperarId(usuario: Usuario): Promise<Aluno> {

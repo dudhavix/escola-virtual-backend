@@ -1,7 +1,11 @@
 import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
+import { AlunoUpdateFactory } from "../aluno/aluno.factory";
+import { MensagemEnum } from "../enum/mensagem.enum";
+import { EmitirMensagemHelper } from "../helpers/mensagens.helper";
 import { Professor } from "../professor/professor.interface";
 import { AulaCreateViewModel, AulaUpdateViewModel } from "./aula.dto";
-import { AulaFactory } from "./aula.factory";
+import { AulaUpdateEntity } from "./aula.entity";
+import { AulaCreateFactory } from "./aula.factory";
 import { Aula } from "./aula.interface";
 import { AulaRepository } from "./aula.repository";
 
@@ -14,62 +18,54 @@ export class AulaService {
         @Inject("AulaRepository") private readonly repository: AulaRepository,
     ){ }
 
-    async create(aula: AulaCreateViewModel): Promise<HttpException> {
+    async create(aula: AulaCreateViewModel, professor: Professor): Promise<void> {
         try {
-            const entity = AulaFactory(aula);
+            const entity = AulaCreateFactory(aula, professor);
             await this.repository.create(entity);
-            return new HttpException('Aula criada', HttpStatus.CREATED);
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
+            EmitirMensagemHelper(MensagemEnum.CRIADO_ERRO);
         }
     }
 
-    async getAll(professor: Professor): Promise<Aula[] | HttpException> {
+    async getAll(professor: Professor): Promise<Aula[]> {
         try {
             var aulas = await this.repository.getAll(professor);
-            if (!aulas.length) {
-                return new HttpException('Nenhuma aula encontrada', HttpStatus.NOT_FOUND);
-            }
+            if (!aulas.length) EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_SUCESSO);
             return aulas;
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
+            EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_ERRO);
         }
     }
 
-    async getId(_id: string): Promise<Aula | HttpException> {
+    async getId(_id: string, professor: Professor): Promise<Aula> {
         try {
-            var aula = await this.repository.getId(_id);
-            if (!aula) {
-                return new HttpException('Nenhuma aula encontrada', HttpStatus.NOT_FOUND);
-            }
+            var aula = await this.repository.getId(_id, professor);
+            if (!aula) EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_SUCESSO);
             return aula;
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
+            EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_ERRO);
         }
     }
 
-    async update(aula: AulaUpdateViewModel): Promise<HttpException> {
+    async update(aula: AulaUpdateViewModel, professor: Professor): Promise<void> {
         try {
-            const { _id, ...info} = aula;
-            const entity = AulaFactory(info);
-            await this.repository.update(entity, _id);
-            return new HttpException('Aula atualizada', HttpStatus.OK);
+            const entity = AlunoUpdateFactory(aula);
+            await this.repository.update(entity, professor);
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
+            EmitirMensagemHelper(MensagemEnum.ALTERACOES_ERRO);
         }
     }
 
-    async delete(_id: string): Promise<HttpException> {
+    async delete(_id: string, professor: Professor): Promise<void> {
         try {
-            await this.repository.delete(_id);
-            return new HttpException('Aula excluida', HttpStatus.OK);
+            await this.repository.delete(_id, professor);
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException("Desculpe ocorreu um erro");
+            EmitirMensagemHelper(MensagemEnum.DELETADO_ERRO);
         }
     }
 }

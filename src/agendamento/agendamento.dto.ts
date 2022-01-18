@@ -1,28 +1,31 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsMongoId, IsNotEmpty, IsString } from "class-validator";
+import { MensagemHelper } from "../helpers/mensagens.helper";
 import { Turma } from "../turma/turma.interface";
 
 export class AgendamentoCreateViewModel {
-    @IsNotEmpty({message: "tem que ser turma"})
+    @IsMongoId({message: MensagemHelper.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
     turma: Turma;
 
-    @IsNotEmpty()
-    @IsString()
+    @IsString({message: MensagemHelper.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
     dataHora: string;
 }
 
 export class AgendamentoUpdateViewModel {
-    @IsString()
-    @IsNotEmpty()
-    readonly _id: string;
+    @IsString({message: MensagemHelper.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
+    _id: string;
 
-    @IsNotEmpty()
-    readonly turma: Turma;
+    @IsMongoId({message: MensagemHelper.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
+    turma: Turma;
     
-    @IsNotEmpty()
-    @IsString()
+    @IsString({message: MensagemHelper.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
     dataHora: string;
 
-    @IsString()
-    @IsNotEmpty()
-    readonly status: string;
+    @IsString({message: MensagemHelper.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
+    status: string;
 }

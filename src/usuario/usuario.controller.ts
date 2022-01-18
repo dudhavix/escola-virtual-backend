@@ -3,7 +3,6 @@ import { AuthGuard } from "@nestjs/passport";
 import { NivelAcessoGuard } from "../auth/estrategia/nivelacesso.guard";
 import { NivelAcessoDecorator } from "../helpers/nivel-acesso.decorator";
 import { NivelAcessoEnum } from "../enum/nivel-acesso.enum";
-import { Resposta } from "../helpers/resposta.interface";
 import { UsuarioAlunoViewModel, UsuarioProfessorViewModel, UsuarioUpdateViewModel } from "./usuario.dto";
 import { UsuarioService } from "./usuario.service";
 import { Token, Usuario } from "./usuario.interface";
@@ -17,7 +16,7 @@ export class UsuarioController {
 
     @Post("/create-professor")
     @UsePipes(ValidationPipe)
-    async createProfessor(@Body() usuario: UsuarioProfessorViewModel): Promise<Resposta> {
+    async createProfessor(@Body() usuario: UsuarioProfessorViewModel): Promise<void> {
         return this.usuarioService.createProfessor(usuario);
     }
 
@@ -28,7 +27,7 @@ export class UsuarioController {
     async createAluno(
         @Req() req: Token,
         @Body() usuario: UsuarioAlunoViewModel
-    ): Promise<Resposta> {
+    ): Promise<void> {
         const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
         return this.usuarioService.createAluno(usuario, professor);
     }
@@ -36,7 +35,7 @@ export class UsuarioController {
     @Put("/ativar/:usuario")
     async ativar(
         @Param("usuario") usuario: string
-    ): Promise<Resposta> {
+    ): Promise<void> {
         return this.usuarioService.ativar(usuario);
     }
 
@@ -46,7 +45,7 @@ export class UsuarioController {
     @UsePipes(ValidationPipe)
     async desativar(
         @Param("usuario") usuario: string
-    ): Promise<Resposta> {
+    ): Promise<void> {
         return this.usuarioService.desativar(usuario);
     }
 
@@ -54,7 +53,7 @@ export class UsuarioController {
     @Put("/update")
     async update(
         @Body() usuario: UsuarioUpdateViewModel
-    ): Promise<Resposta> {
+    ): Promise<void> {
         return this.usuarioService.update(usuario);
     }
 

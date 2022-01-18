@@ -1,36 +1,31 @@
-import { IsArray, IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { Professor } from "src/professor/professor.interface";
+import { IsArray, IsMongoId, IsNotEmpty, IsString } from "class-validator";
 import { Arquivo } from "../arquivo/arquivo.interface";
+import { MensagemHelper } from "../helpers/mensagens.helper";
 
 export class AulaCreateViewModel {
-    @IsString()
-    @IsNotEmpty()
-    professor: Professor;
-
-    @IsString()
-    @IsNotEmpty()
+    @IsString({message: MensagemHelper.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
     temaAula: string;
 
-    @IsString()
+    @IsString({message: MensagemHelper.CAMPO_INVALIDO})
     observacao: string;
 
-    @IsArray()
+    @IsArray({message: MensagemHelper.CAMPO_INVALIDO})
     arquivos: Array<Arquivo>;
 }
 
 export class AulaUpdateViewModel {
-    readonly _id: string;
-    readonly professor: Professor;
+    @IsMongoId({message: MensagemHelper.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
+    _id: string;
 
-    @IsString()
-    @IsOptional()
+    @IsString({message: MensagemHelper.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
     temaAula: string;
 
-    @IsString()
-    @IsOptional()
+    @IsString({message: MensagemHelper.CAMPO_INVALIDO})
     observacao: string;
 
-    @IsArray()
-    @IsOptional()
+    @IsArray({message: MensagemHelper.CAMPO_INVALIDO})
     arquivos: Array<Arquivo>;
 }

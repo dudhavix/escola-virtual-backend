@@ -4,7 +4,6 @@ import { NivelAcessoGuard } from '../auth/estrategia/nivelacesso.guard';
 import { NivelAcessoDecorator } from '../helpers/nivel-acesso.decorator';
 import { NivelAcessoEnum } from '../enum/nivel-acesso.enum';
 import { AlunoService } from './aluno.service';
-import { Resposta } from '../helpers/resposta.interface';
 import { Aluno } from './aluno.interface';
 import { AlunoUpdateViewModel } from './aluno.dto';
 import { UsuarioService } from '../usuario/usuario.service';
@@ -40,7 +39,7 @@ export class AlunoController {
     async update(
         @Req() req: Token,
         @Body() aluno: AlunoUpdateViewModel
-    ): Promise<Resposta> {
+    ): Promise<void> {
         const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
         return this.alunoService.update(aluno, professor);
     }

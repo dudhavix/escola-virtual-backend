@@ -14,18 +14,22 @@ export class AulaRepository {
     }
 
     async getAll(professor: Professor): Promise<Aula[]> {
-        return this.model.find({professor});
+        const aulas = await this.model.find({professor});
+        if(!aulas.length) null;
+        return aulas;
     }
 
-    async getId(_id: string): Promise<Aula> {
-        return this.model.findOne({ _id });
+    async getId(_id: string, professor: Professor): Promise<Aula> {
+        const aula = await this.model.findOne({ _id, professor });
+        if(!aula) null;
+        return aula;
     }
 
-    async update(aula: Aula, _id: string): Promise<void> {
-        await this.model.findByIdAndUpdate({ _id }, { $set: aula });
+    async update(aula: Aula, professor: Professor): Promise<void> {
+        await this.model.updateOne({ _id: aula._id, professor }, { $set: aula });
     }
 
-    async delete(_id: string): Promise<void> {
-        await this.model.deleteOne({ _id });
+    async delete(_id: string, professor: Professor): Promise<void> {
+        await this.model.deleteOne({ _id, professor });
     }
 } 

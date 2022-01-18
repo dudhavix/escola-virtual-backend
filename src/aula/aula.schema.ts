@@ -1,7 +1,7 @@
-import { Document, Schema } from "mongoose";
+import { Schema } from "mongoose";
 import { Aula } from "src/aula/aula.interface";
 
-export interface AulaDocument extends Aula, Document { }
+export interface AulaDocument extends Aula { }
 
 export const AulaSchema = new Schema<AulaDocument>({
     professor: { type: Schema.Types.ObjectId, ref: "Professor", required: true },

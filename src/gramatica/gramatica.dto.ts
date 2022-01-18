@@ -1,44 +1,41 @@
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsMongoId, IsNotEmpty, IsString } from "class-validator";
 import { NivelEnum } from "../enum/nivel.enum";
-import { Professor } from "../professor/professor.interface";
+import { MensagemHelper } from "../helpers/mensagens.helper";
 
 export class GramaticaCreateViewModel {
-    @IsNotEmpty()
-    professor: Professor;
-
-    @IsString()
-    @IsNotEmpty()
+    @IsString({message: MensagemHelper.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
     sentenca1: string;
 
-    @IsString()
-    @IsNotEmpty()
+    @IsString({message: MensagemHelper.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
     sentenca2: string;
 
-    @IsString()
+    @IsString({message: MensagemHelper.CAMPO_INVALIDO})
     sentenca3: string;
 
-    @IsString()
-    @IsNotEmpty()
+    @IsString({message: MensagemHelper.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
     nivel: NivelEnum;
 }
 
 export class GramaticaUpdateViewModel {
-    readonly _id: string;
-    readonly professor: Professor;
+    @IsMongoId()
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
+    _id: string;
 
-    @IsString()
-    @IsOptional()
+    @IsString({message: MensagemHelper.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
     sentenca1: string;
 
-    @IsString()
-    @IsOptional()
+    @IsString({message: MensagemHelper.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
     sentenca2: string;
 
-    @IsString()
-    @IsOptional()
+    @IsString({message: MensagemHelper.CAMPO_INVALIDO})
     sentenca3: string;
 
-    @IsString()
-    @IsOptional()
+    @IsString({message: MensagemHelper.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
     nivel: NivelEnum;
 }

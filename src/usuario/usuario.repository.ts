@@ -1,8 +1,6 @@
-import { UnauthorizedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { StatusEnum } from "../enum/status.enum";
-import { MensagemHelper } from "../helpers/mensagens.helper";
 import { Usuario } from "./usuario.interface";
 import { UsuarioDocument } from "./usuario.schema";
 
@@ -16,11 +14,15 @@ export class UsuarioRepository {
     }
 
     async getEmail(email: string): Promise<Usuario> {
-        return this.model.findOne({ email, status: StatusEnum.ativo});
+        const usuario = await this.model.findOne({ email, status: StatusEnum.ativo});
+        if(!usuario) null;
+        return usuario;
     }
 
     async getId(_id: string): Promise<Usuario> {
-        return this.model.findOne({ _id }, ["nome", "email", "telefone", "dataNascimento", "foto"]);
+        const usuario = await this.model.findOne({ _id }, ["nome", "email", "telefone", "dataNascimento", "foto"]);
+        if(!usuario) null;
+        return usuario;
     }
 
     async ativar(_id: string): Promise<void> {
@@ -40,6 +42,8 @@ export class UsuarioRepository {
     }
 
     async validarExiste(key: string, value: string): Promise<Usuario> {
-        return this.model.findOne({ [key]: value });
+        const usuario = await this.model.findOne({ [key]: value });
+        if(!usuario) null;
+        return usuario;
     }
 }

@@ -1,35 +1,19 @@
-import { IsBoolean, IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { Aluno } from "../aluno/aluno.interface";
-
-
-export class PautaCreateViewModel {
-    @IsNotEmpty()
-    aluno: Aluno;
-
-    @IsBoolean()
-    @IsNotEmpty()
-    presente: boolean;
-
-    @IsString()
-    atraso: string;
-
-    @IsString()
-    observacao: string;
-}
+import { IsArray, IsMongoId, IsNotEmpty, IsString, MinLength } from "class-validator";
+import { MensagemEnum } from "../enum/mensagem.enum";
 
 export class PautaUpdateViewModel {
-    readonly _id: string;
-    readonly aluno: Aluno;
+    @IsMongoId({message: MensagemEnum.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemEnum.CAMPO_OBRIGATORIO})
+    _id: string;
+    
+    @IsArray({message: MensagemEnum.CAMPO_INVALIDO})
+    @MinLength(1, {message: MensagemEnum.CAMPO_INVALIDO})
+    @IsNotEmpty({message: MensagemEnum.CAMPO_OBRIGATORIO})
+    frequencia: [{dataHora: string, presente: boolean}];
 
-    @IsBoolean()
-    @IsOptional()
-    presente: boolean;
-
-    @IsString()
-    @IsOptional()
+    @IsString({message: MensagemEnum.CAMPO_INVALIDO})
     atraso: string;
 
-    @IsString()
-    @IsOptional()
+    @IsString({message: MensagemEnum.CAMPO_INVALIDO})
     observacao: string;
 }

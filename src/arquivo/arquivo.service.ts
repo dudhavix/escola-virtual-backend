@@ -1,12 +1,12 @@
-import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { ArquivoRepository } from "./arquivo.repository";
 import * as path from "path";
 import * as fs from "fs";
 import { ArquivoFactory } from "./arquivo.factory";
 import { Arquivo } from "./arquivo.interface";
-import { Resposta } from "../helpers/resposta.interface";
-import { MensagemHelper } from "../helpers/mensagens.helper";
+import { EmitirMensagemHelper } from "../helpers/mensagens.helper";
 import { Usuario } from "../usuario/usuario.interface";
+import { MensagemEnum } from "../enum/mensagem.enum";
 
 @Injectable()
 export class ArquivoService {
@@ -17,47 +17,51 @@ export class ArquivoService {
         @Inject("ArquivoRepository") private readonly repository: ArquivoRepository,
     ) { }
 
-    async create(arquivo: Express.Multer.File, usuario: Usuario): Promise<Resposta> {
+    async create(arquivo: Express.Multer.File, usuario: Usuario): Promise<void> {
         try {
             const file = path.join("public", `${Date.now()}.${this.getExtensao(arquivo.originalname)}`);
             const entity = ArquivoFactory(arquivo.originalname, this.getSize(arquivo.size), file.split("\\")[1], arquivo.mimetype, usuario);
             fs.writeFileSync(file, arquivo.buffer);
-            await this.repository.create(entity)
-            return { status: HttpStatus.CREATED, menssagem: MensagemHelper.CRIADO_SUCESSO }
+            await this.repository.create(entity);
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException(MensagemHelper.CRIADO_ERRO);
+            EmitirMensagemHelper(MensagemEnum.CRIADO_ERRO);
         }
     }
 
     async getAll(usuario: Usuario): Promise<Arquivo[]> {
-        var arquivos = await this.repository.getAll(usuario);
-        if (!arquivos.length) {
-            throw new NotFoundException(MensagemHelper.NADA_ENCONTRADO);
+        try {
+            var arquivos = await this.repository.getAll(usuario);
+            if (!arquivos) EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_SUCESSO);
+            return arquivos;
+        } catch (error) {
+            this.logger.error(error);
+            EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_ERRO);
         }
-        return arquivos;
     }
 
     async getId(_id: string, usuario: Usuario): Promise<Arquivo> {
-        var arquivo = await this.repository.getId(_id, usuario);
-        if (!arquivo) {
-            throw new NotFoundException(MensagemHelper.NADA_ENCONTRADO);
+        try {
+            var arquivo = await this.repository.getId(_id, usuario);
+            if (!arquivo) EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_SUCESSO);
+            return arquivo;
+        } catch (error) {
+            this.logger.error(error);
+            EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_ERRO);
         }
-        return arquivo;
     }
 
-    async delete(_id: string, usuario: Usuario): Promise<Resposta> {
+    async delete(_id: string, usuario: Usuario): Promise<void> {
         try {
             const arquivo = await this.repository.getId(_id, usuario);
             const file = path.join("public", `${arquivo.caminho}`);
             fs.unlink(file, function (err) {
-                if (err) throw new BadRequestException("Erro ao salvar o arquivo");
+                if (err) EmitirMensagemHelper(MensagemEnum.OCORREU_ERRO);
             })
             await this.repository.delete(_id, usuario);
-            return { status: HttpStatus.OK, menssagem: MensagemHelper.DELETADO_SUCESSO }
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException(MensagemHelper.DELETADO_ERRO);
+            EmitirMensagemHelper(MensagemEnum.DELETADO_ERRO);
         }
     }
 

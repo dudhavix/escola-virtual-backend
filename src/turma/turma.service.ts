@@ -1,10 +1,9 @@
-import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { TurmaCreateViewModel, TurmaUpdateViewModel } from "src/turma/turma.dto";
 import { Professor } from "../professor/professor.interface";
 import { Turma } from "./turma.interface";
 import { TurmaRepository } from "./turma.repository";
-import { Resposta } from "../helpers/resposta.interface";
-import { MensagemHelper } from "../helpers/mensagens.helper";
+import { EmitirMensagemHelper } from "../helpers/mensagens.helper";
 import { TurmaCreateFactory, TurmaUpdateFactory } from "./turma.factory";
 
 @Injectable()
@@ -16,42 +15,54 @@ export class TurmaService {
         @Inject("TurmaRepository") private readonly repository: TurmaRepository,
     ) { }
 
-    async create(turma: TurmaCreateViewModel, professor: Professor): Promise<Resposta> {
+    async create(turma: TurmaCreateViewModel, professor: Professor): Promise<void> {
         try {
             const entity = TurmaCreateFactory(turma, professor);
             await this.repository.create(entity);
-            return { menssagem: MensagemHelper.CRIADO_SUCESSO, status: HttpStatus.CREATED }
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException(MensagemHelper.OCORREU_ERRO);
+            EmitirMensagemHelper(7);
         }
     }
 
-    async getAll(professor: Professor): Promise<Turma[] | HttpException> {
-        var turmas = await this.repository.getAll(professor);
-        if (!turmas.length) {
-            throw new NotFoundException(MensagemHelper.NADA_ENCONTRADO);
+    async getAll(professor: Professor): Promise<Turma[]> {
+        try {
+            const turmas = await this.repository.getAll(professor);
+            if (!turmas) EmitirMensagemHelper(5);
+            return turmas;
+        } catch (error) {
+            this.logger.error(error);
+            EmitirMensagemHelper(6);
         }
-        return turmas;
     }
 
     async getId(_id: string, professor: Professor): Promise<Turma> {
-        return await this.repository.getId(_id, professor);
-    }
-
-    async update(turma: TurmaUpdateViewModel, professor: Professor): Promise<Resposta> {
         try {
-            const entity = TurmaUpdateFactory(turma);
-            await this.repository.update(entity, professor);
-            return { menssagem: MensagemHelper.ALTERACOES_REALIZADAS, status: HttpStatus.CREATED }
+            const turma = await this.repository.getId(_id, professor);
+            if (!turma) EmitirMensagemHelper(5);
+            return turma;
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException(MensagemHelper.OCORREU_ERRO);
+            EmitirMensagemHelper(6);
         }
     }
 
-    async delete(_id: string, professor: Professor): Promise<Resposta> {
-        await this.repository.delete(_id, professor);
-        return { menssagem: MensagemHelper.DELETADO_SUCESSO, status: HttpStatus.OK }
+    async update(turma: TurmaUpdateViewModel, professor: Professor): Promise<void> {
+        try {
+            const entity = TurmaUpdateFactory(turma);
+            await this.repository.update(entity, professor);
+        } catch (error) {
+            this.logger.error(error);
+            EmitirMensagemHelper(9);
+        }
+    }
+
+    async delete(_id: string, professor: Professor): Promise<void> {
+        try {
+            await this.repository.delete(_id, professor);
+        } catch (error) {
+            this.logger.error(error);
+            EmitirMensagemHelper(8);
+        }
     }
 }

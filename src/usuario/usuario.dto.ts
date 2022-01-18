@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, Matches } from "class-validator";
+import { IsAscii, IsEmail, IsMongoId, IsNotEmpty, IsObject, IsOptional, IsString, IsUUID, Matches, MaxLength, MinLength } from "class-validator";
+import { isValidObjectId } from "mongoose";
 import { IdiomaEnum } from "src/enum/idioma.enum";
 import { Arquivo } from "../arquivo/arquivo.interface";
 import { NivelAcessoEnum } from "../enum/nivel-acesso.enum";
@@ -96,17 +97,19 @@ export class UsuarioAlunoViewModel {
 
 export class LoginViewModel {
     @IsEmail({},{message: MensagemHelper.EMAIL_VALIDO})
-    @IsNotEmpty({message: MensagemHelper.CAMPO_VAZIO_INVALIDO("email")})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
     email: string;
 
-    @IsString()
-    @IsNotEmpty({message: MensagemHelper.CAMPO_VAZIO_INVALIDO("senha")})
+    @IsAscii()
+    @MinLength(6, {message: MensagemHelper.SENHA_VALIDA})
+    @MaxLength(12, {message: MensagemHelper.SENHA_VALIDA})
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
     senha: string;
 }
 
 export class UsuarioViewModel {
-    @IsString()
-    @IsOptional()
+    @IsMongoId()
+    @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
     _id: string;
 
     @IsString()

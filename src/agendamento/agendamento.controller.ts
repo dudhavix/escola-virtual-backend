@@ -3,9 +3,6 @@ import { AuthGuard } from "@nestjs/passport";
 import { NivelAcessoGuard } from "../auth/estrategia/nivelacesso.guard";
 import { NivelAcessoEnum } from "../enum/nivel-acesso.enum";
 import { NivelAcessoDecorator } from "../helpers/nivel-acesso.decorator";
-import { Resposta } from "../helpers/resposta.interface";
-import { Professor } from "../professor/professor.interface";
-import { TurmaService } from "../turma/turma.service";
 import { Token } from "../usuario/usuario.interface";
 import { UsuarioService } from "../usuario/usuario.service";
 import { AgendamentoCreateViewModel, AgendamentoUpdateViewModel } from "./agendamento.dto";
@@ -17,7 +14,6 @@ import { AgendamentoService } from "./agendamento.service";
 export class AgendamentoController {
     constructor(
         private readonly agendamentoService: AgendamentoService,
-        private readonly turmaService: TurmaService,
         private readonly usuarioService: UsuarioService
     ) { }
 
@@ -27,10 +23,8 @@ export class AgendamentoController {
     async create(
         @Req() req: Token,
         @Body() agendamento: AgendamentoCreateViewModel
-    ): Promise<any> {
+    ): Promise<void> {
         const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
-        const turma = agendamento.turma as unknown;
-        await this.turmaService.getId(turma as string, professor)
         return this.agendamentoService.create(agendamento, professor);
     }
 
@@ -58,7 +52,7 @@ export class AgendamentoController {
     async remarcar(
         @Req() req: Token,
         @Body() agendamento: AgendamentoUpdateViewModel
-    ): Promise<Resposta> {
+    ): Promise<void> {
         const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
         return this.agendamentoService.remarcar(agendamento, professor);
     }
@@ -68,7 +62,7 @@ export class AgendamentoController {
     async cancelar(
         @Req() req: Token,
         @Param("agendamento") agendamento: string
-    ): Promise<Resposta> {
+    ): Promise<void> {
         const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
         return this.agendamentoService.cancelar(agendamento, professor);
     }
@@ -78,7 +72,7 @@ export class AgendamentoController {
     async concluida(
         @Req() req: Token,
         @Param("agendamento") agendamento: string
-    ): Promise<Resposta> {
+    ): Promise<void> {
         const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
         return this.agendamentoService.concluir(agendamento, professor);
     }

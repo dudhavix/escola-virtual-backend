@@ -1,8 +1,7 @@
-import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
-import { MensagemHelper } from "../helpers/mensagens.helper";
-import { Resposta } from "../helpers/resposta.interface";
+import { Inject, Injectable, Logger } from "@nestjs/common";
+import { MensagemEnum } from "../enum/mensagem.enum";
+import { EmitirMensagemHelper } from "../helpers/mensagens.helper";
 import { Professor } from "../professor/professor.interface";
-import { Turma } from "../turma/turma.interface";
 import { Usuario } from "../usuario/usuario.interface";
 import { AlunoUpdateViewModel } from "./aluno.dto";
 import { AlunoUpdateFactory } from "./aluno.factory";
@@ -17,31 +16,35 @@ export class AlunoService {
         @Inject("AlunoRepository") private readonly repository: AlunoRepository,
     ) { }
 
-
     async getAll(professor: Professor): Promise<Aluno[]> {
-        var alunos = await this.repository.getAll(professor);
-        if (!alunos.length) {
-            throw new NotFoundException(MensagemHelper.NADA_ENCONTRADO)
+        try {
+            const alunos = await this.repository.getAll(professor);
+            if (!alunos) EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_SUCESSO);
+            return alunos;
+        } catch (error) {
+            this.logger.error(error);
+            EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_ERRO);
         }
-        return alunos;
     }
 
     async getId(_id: string, professor: Professor): Promise<Aluno> {
-        var aluno = await this.repository.getId(_id, professor);
-        if (!aluno) {
-            throw new NotFoundException(MensagemHelper.NADA_ENCONTRADO);      
+        try {
+            const aluno = await this.repository.getId(_id, professor);
+            if (!aluno) EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_SUCESSO);
+            return aluno;
+        } catch (error) {
+            this.logger.error(error);
+            EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_ERRO);
         }
-        return aluno;
     }
 
-    async update(aluno: AlunoUpdateViewModel, professor: Professor): Promise<Resposta> {
+    async update(aluno: AlunoUpdateViewModel, professor: Professor): Promise<void> {
         try {
             const entity = AlunoUpdateFactory(aluno);
             await this.repository.update(entity, professor);
-            return {status: HttpStatus.OK, menssagem: MensagemHelper.ALTERACOES_REALIZADAS};
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException(MensagemHelper.ALTERACOES_NAO_REALIZADAS);
+            EmitirMensagemHelper(MensagemEnum.ALTERACOES_ERRO);
         }
     }
 

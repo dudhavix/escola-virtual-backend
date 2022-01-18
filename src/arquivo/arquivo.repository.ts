@@ -1,4 +1,3 @@
-import { BadRequestException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Usuario } from "../usuario/usuario.interface";
@@ -15,12 +14,14 @@ export class ArquivoRepository {
     }
 
     async getAll(usuario: Usuario): Promise<Arquivo[]> {
-        return this.model.find({usuario}, ["nome", "caminho"]);
+        const arquivos = await this.model.find({usuario}, ["nome", "caminho"]);
+        if(!arquivos.length) null;
+        return arquivos;
     }
 
     async getId(_id: string, usuario: Usuario): Promise<Arquivo> {
         const arquivo = await this.model.findOne({ _id, usuario }, ["nome", "caminho"]);
-        if(!arquivo) throw new BadRequestException("Nenhum arquivo com esse usuário");
+        if(!arquivo) null;
         return arquivo;
     }
 
