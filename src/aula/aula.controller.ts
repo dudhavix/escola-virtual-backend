@@ -1,9 +1,8 @@
-import { Body, Controller, Delete, Get, Header, Headers, HttpException, Param, Post, Put, Req, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { NivelAcessoGuard } from "../auth/estrategia/nivelacesso.guard";
 import { NivelAcessoEnum } from "../enum/nivel-acesso.enum";
 import { NivelAcessoDecorator } from "../helpers/nivel-acesso.decorator";
-import { Professor } from "../professor/professor.interface";
 import { Token } from "../usuario/usuario.interface";
 import { UsuarioService } from "../usuario/usuario.service";
 import { AulaCreateViewModel, AulaUpdateViewModel } from "./aula.dto";

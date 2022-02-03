@@ -1,7 +1,7 @@
-import { Document, Schema } from "mongoose";
+import { Schema } from "mongoose";
 import { Tarefa } from "src/tarefa/tarefa.interface";
 
-export interface TarefaDocument extends Tarefa, Document { }
+export interface TarefaDocument extends Tarefa { }
 
 export const TarefaSchema = new Schema<TarefaDocument>({
     aula: { type: Schema.Types.ObjectId, ref: "Aula", required: true },

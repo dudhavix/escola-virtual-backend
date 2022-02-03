@@ -1,13 +1,13 @@
-import { Body, Controller, Delete, Get, Headers, HttpException, HttpStatus, Param, Post, Put, Req, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { TurmaService } from "src/turma/turma.service";
 import { NivelAcessoGuard } from "../auth/estrategia/nivelacesso.guard";
 import { NivelAcessoEnum } from "../enum/nivel-acesso.enum";
 import { NivelAcessoDecorator } from "../helpers/nivel-acesso.decorator";
-import { Resposta } from "../helpers/resposta.interface";
 import { Token } from "../usuario/usuario.interface";
 import { UsuarioService } from "../usuario/usuario.service";
 import { TurmaCreateViewModel, TurmaUpdateViewModel } from "./turma.dto";
+import { Turma } from "./turma.interface";
 
 @UseGuards(AuthGuard("jwt"), NivelAcessoGuard)
 @Controller("api/turma")
@@ -24,7 +24,7 @@ export class TurmaController {
     async create(
         @Req() req: Token,
         @Body() turma: TurmaCreateViewModel
-    ): Promise<Resposta> {
+    ): Promise<void> {
         const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
         return this.turmaService.create(turma, professor);
     }
@@ -33,7 +33,7 @@ export class TurmaController {
     @Get("/getAll")
     async getAll(
         @Req() req: Token,
-    ): Promise<any> {
+    ): Promise<Turma[]> {
         const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
         return this.turmaService.getAll(professor);
     }
@@ -43,7 +43,7 @@ export class TurmaController {
     async getId(
         @Req() req: Token,
         @Param("turma") turma: string
-    ): Promise<any> {
+    ): Promise<Turma> {
         const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
         return this.turmaService.getId(turma, professor);
     }
@@ -53,7 +53,7 @@ export class TurmaController {
     async update(
         @Req() req: Token,
         @Body() turma: TurmaUpdateViewModel
-    ): Promise<Resposta> {
+    ): Promise<void> {
         const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
         return this.turmaService.update(turma, professor);
     }
@@ -62,7 +62,7 @@ export class TurmaController {
     async delete(
         @Req() req: Token,
         @Param("turma") turma: string
-    ): Promise<any> {
+    ): Promise<void> {
         const professor = await this.usuarioService.recuperarId(req.user.nivelAcesso, req.user._id);
         return this.turmaService.delete(turma, professor);
     }

@@ -96,7 +96,7 @@ export class UsuarioAlunoViewModel {
 }
 
 export class LoginViewModel {
-    @IsEmail({},{message: MensagemHelper.EMAIL_VALIDO})
+    @IsEmail({},{message: MensagemHelper.EMAIL_INVALIDO})
     @IsNotEmpty({message: MensagemHelper.CAMPO_OBRIGATORIO})
     email: string;
 

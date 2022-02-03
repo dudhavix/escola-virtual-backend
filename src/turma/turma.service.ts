@@ -5,6 +5,7 @@ import { Turma } from "./turma.interface";
 import { TurmaRepository } from "./turma.repository";
 import { EmitirMensagemHelper } from "../helpers/mensagens.helper";
 import { TurmaCreateFactory, TurmaUpdateFactory } from "./turma.factory";
+import { MensagemEnum } from "../enum/mensagem.enum";
 
 @Injectable()
 export class TurmaService {
@@ -21,29 +22,29 @@ export class TurmaService {
             await this.repository.create(entity);
         } catch (error) {
             this.logger.error(error);
-            EmitirMensagemHelper(7);
+            EmitirMensagemHelper(MensagemEnum.CRIADO_ERRO)
         }
     }
 
     async getAll(professor: Professor): Promise<Turma[]> {
         try {
             const turmas = await this.repository.getAll(professor);
-            if (!turmas) EmitirMensagemHelper(5);
+            if (!turmas) EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_SUCESSO);
             return turmas;
         } catch (error) {
             this.logger.error(error);
-            EmitirMensagemHelper(6);
+            EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_ERRO);
         }
     }
 
     async getId(_id: string, professor: Professor): Promise<Turma> {
         try {
             const turma = await this.repository.getId(_id, professor);
-            if (!turma) EmitirMensagemHelper(5);
+            if (!turma) EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_SUCESSO);
             return turma;
         } catch (error) {
             this.logger.error(error);
-            EmitirMensagemHelper(6);
+            EmitirMensagemHelper(MensagemEnum.NADA_ENCONTRADO_ERRO);
         }
     }
 
@@ -53,7 +54,7 @@ export class TurmaService {
             await this.repository.update(entity, professor);
         } catch (error) {
             this.logger.error(error);
-            EmitirMensagemHelper(9);
+            EmitirMensagemHelper(MensagemEnum.ALTERACOES_ERRO);
         }
     }
 
@@ -62,7 +63,7 @@ export class TurmaService {
             await this.repository.delete(_id, professor);
         } catch (error) {
             this.logger.error(error);
-            EmitirMensagemHelper(8);
+            EmitirMensagemHelper(MensagemEnum.DELETADO_ERRO);
         }
     }
 }

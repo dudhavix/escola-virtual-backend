@@ -11,15 +11,24 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
     app.use(express.static(join("public")));
-    app.enableCors();
+    
+    // app.use((req, res, next) => {
+    //     res.header();
+    //     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
+    // })
+
+    app.enableCors({
+        origin: "*",
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        preflightContinue: false,
+        optionsSuccessStatus: 204
+    })
 
     Date.prototype.toJSON = function (): any {
         return momentTimezone(this)
             .tz('America/Sao_Paulo')
             .format('DD-MM-YYYY HH:mm:ss')
     }
-
-    console.log(process.env.PORTA);
 
     await app.listen(process.env.PORT || 3333);
 }

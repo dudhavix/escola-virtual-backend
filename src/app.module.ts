@@ -1,7 +1,7 @@
 import { ProfessorService } from './professor/professor.service';
 import { AlunoController } from './aluno/aluno.controller';
-import { AuthService } from './auth/auth.service';
-import { AuthController } from './auth/auth.controller';
+
+
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -27,6 +27,9 @@ import { AulaSchema } from './aula/aula.schema';
 import { AulaRepository } from './aula/aula.repository';
 import { AulaService } from './aula/aula.service';
 import { AulaController } from './aula/aula.controller';
+
+import { AuthService } from './auth/auth.service';
+import { AuthController } from './auth/auth.controller';
 
 import { GramaticaSchema } from './gramatica/gramatica.schema';
 import { GramaticaRepository } from './gramatica/gramatica.repository';
@@ -73,7 +76,7 @@ import { PassportModule } from '@nestjs/passport';
         PassportModule,
         JwtModule.register({
             privateKey: process.env.SECRET,
-            signOptions: { expiresIn: "7d" }
+            signOptions: { expiresIn: "60s" }
         }),
         MongooseModule.forRoot(`${process.env.BD_URL}`, { useNewUrlParser: true, useUnifiedTopology: true }),
         MongooseModule.forFeature([{ name: 'Agendamento', schema: AgendamentoSchema }]),

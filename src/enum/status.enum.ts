@@ -6,4 +6,6 @@ export enum StatusEnum {
     naoFez = "não fez",
     ativo = "ativo",
     inativo = "inativo",
+    online = "online",
+    offline = "offline",
 }
