@@ -23,6 +23,10 @@ import { ArquivoService } from './arquivo/arquivo.service';
 import { ArquivoRepository } from './arquivo/arquivo.repository';
 import { ArquivoController } from './arquivo/arquivo.controller';
 
+import { AuditoriaService } from './auditoria/auditoria.service';
+import { AuditoriaController } from './auditoria/auditoria.controller';
+auditoria
+
 import { AulaSchema } from './aula/aula.schema';
 import { AulaRepository } from './aula/aula.repository';
 import { AulaService } from './aula/aula.service';
@@ -93,6 +97,7 @@ import { PassportModule } from '@nestjs/passport';
         MongooseModule.forFeature([{ name: 'Usuario', schema: UsuarioSchema }]),
     ],
     controllers: [
+        AuditoriaController,
         AgendamentoController,
         AlunoController,
         ArquivoController,
@@ -107,6 +112,7 @@ import { PassportModule } from '@nestjs/passport';
         UsuarioController,
     ],
     providers: [
+        AuditoriaService,
         ProfessorService,
         LocalStrategy,
         JwtStrategy,
