@@ -3,7 +3,7 @@ export enum NivelFluenciaEnum {
     iniciante = "INICIANTE",
     basico = "BÁSICO",
     intermediario = "INTERMEDIÁRIO",
-    avancao = "AVANÇADO"
+    avancado = "AVANÇADO"
 }
 
 export enum AcessoEnum {
@@ -44,6 +44,8 @@ export enum FrequenciaTurmaEnum{
 }
 
 export enum AcaoEnum{
-    criouUsuario = "Criou usuário",
     ativarUsuario = "Usuário ativado",
+    criouUsuario = "Criou usuário",
+    criouArquivo = "Criou arquivo",
+    deletadoArquivo = "Deletou arquivo",
 }
