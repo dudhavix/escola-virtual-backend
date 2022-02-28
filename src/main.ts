@@ -11,12 +11,6 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
     app.use(express.static(join("public")));
-    
-    // app.use((req, res, next) => {
-    //     res.header();
-    //     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
-    // })
-
     app.enableCors({
         origin: "*",
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
