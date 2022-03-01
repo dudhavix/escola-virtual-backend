@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { UsuarioCreateFactory } from "../entities/usuario.entity";
 import { DI_USUARIO_REPOSITORY } from "../helpers/container-names";
 import { AcaoEnum, MensagensEnum } from "../helpers/index.enum";
@@ -23,7 +23,7 @@ export class UsuarioService {
             await this.auditoriaServie.create(realizadoAcao, `${AcaoEnum.criouUsuario} ${novoAluno._id}`);
         } catch (error) {
             this.logger.error(error);
-            throw new BadRequestException(MensagensEnum.erro);
+            throw new Error(MensagensEnum.erro);
         }
     }
 

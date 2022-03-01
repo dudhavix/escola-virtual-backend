@@ -6,3 +6,6 @@ export const DI_AUDITORIA_REPOSITORY = "AUDITORIA_REPOSITORY";
 
 export const DI_ARQUIVO_SCHEMA = "arquivo";
 export const DI_ARQUIVO_REPOSITORY = "ARQUIVO_REPOSITORY";
+
+export const DI_TURMA_SCHEMA = "turma";
+export const DI_TURMA_REPOSITORY = "TURMA_REPOSITORY";

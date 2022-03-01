@@ -29,6 +29,7 @@ export enum MensagensEnum {
     campoObrigatorio = "Campos obrigatórios estão vazios.",
     erro = "Ocorreu um erro inesperado, tente novamente mais tarde.",
     naoAutorizado = "Não Autorizado.",
+    naoAutorizadoOperacao = "Usuário não autorizado a realizar essa operação",
     naoEncontrado = "Nenhuma informação encontrada."
 }
 
@@ -45,7 +46,9 @@ export enum FrequenciaTurmaEnum{
 
 export enum AcaoEnum{
     ativarUsuario = "Usuário ativado",
-    criouUsuario = "Criou usuário",
     criouArquivo = "Criou arquivo",
+    criouTurma = "Criou turma",
+    criouUsuario = "Criou usuário",
     deletadoArquivo = "Deletou arquivo",
+    deletadoTurma = "Deletou turma",
 }
