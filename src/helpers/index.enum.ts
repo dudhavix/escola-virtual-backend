@@ -17,7 +17,9 @@ export enum StatusEnum {
     pendente = "PENDENTE",
     confirmado = "CONFIRMADO",
     inativo = "INATIVO",
-    ativo = "ATIVO"
+    ativo = "ATIVO",
+    cancelado = "CANCELADO",
+    realizado = "REALIZADO",
 }
 
 export enum IdiomaEnum {
@@ -46,6 +48,8 @@ export enum FrequenciaTurmaEnum{
 
 export enum AcaoEnum{
     ativarUsuario = "Usuário ativado",
+    cancelouAgendamento = "Cancelou o agendamento",
+    criouAgendamento = "Criou um agendamento",
     criouArquivo = "Criou arquivo",
     criouTurma = "Criou turma",
     criouUsuario = "Criou usuário",

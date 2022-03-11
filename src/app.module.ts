@@ -7,7 +7,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './helpers/jwt.strategy';
 import { LocalStrategy } from './helpers/local.strategy';
 
-import { DI_ARQUIVO_REPOSITORY, DI_ARQUIVO_SCHEMA, DI_AUDITORIA_REPOSITORY, DI_AUDITORIA_SCHEMA, DI_TURMA_REPOSITORY, DI_TURMA_SCHEMA, DI_USUARIO_REPOSITORY, DI_USUARIO_SCHEMA } from './helpers/container-names';
+import { DI_AGENDAMENTO_REPOSITORY, DI_AGENDAMENTO_SCHEMA, DI_ARQUIVO_REPOSITORY, DI_ARQUIVO_SCHEMA, DI_AUDITORIA_REPOSITORY, DI_AUDITORIA_SCHEMA, DI_TURMA_REPOSITORY, DI_TURMA_SCHEMA, DI_USUARIO_REPOSITORY, DI_USUARIO_SCHEMA } from './helpers/container-names';
 
 import { ArquivoController } from './controllers/arquivo.controller';
 import { ArquivoSchema } from './entities/arquivo.entity';
@@ -31,6 +31,11 @@ import { UsuarioController } from './controllers/usuario.controller';
 import { UsuarioService } from './services/usuario.service';
 import { UsuarioSchema } from './entities/usuario.entity';
 
+import { AgendamentoSchema } from './entities/agendamento.entity';
+import { AgendamentoController } from './controllers/agendamento.controller';
+import { AgendamentoService } from './services/agendamento.service';
+import { AgendamentoRepository } from './repositories/agendamento.repository';
+
 @Module({
     imports: [
         ConfigModule.forRoot(),
@@ -40,18 +45,21 @@ import { UsuarioSchema } from './entities/usuario.entity';
             signOptions: { expiresIn: process.env.TEMPO_EXPIRACAO }
         }),
         MongooseModule.forRoot(`${process.env.BD_URL}`, { useNewUrlParser: true, useUnifiedTopology: true }),
+        MongooseModule.forFeature([{ name: DI_AGENDAMENTO_SCHEMA, schema: AgendamentoSchema }]),
         MongooseModule.forFeature([{ name: DI_AUDITORIA_SCHEMA, schema: AuditoriaSchema }]),
         MongooseModule.forFeature([{ name: DI_ARQUIVO_SCHEMA, schema: ArquivoSchema }]),
         MongooseModule.forFeature([{ name: DI_TURMA_SCHEMA, schema: TurmaSchema }]),
         MongooseModule.forFeature([{ name: DI_USUARIO_SCHEMA, schema: UsuarioSchema }]),
     ],
     controllers: [
+        AgendamentoController,
         ArquivoController,
         AuthController,
         UsuarioController,
         TurmaController
     ],
     providers: [
+        AgendamentoService,
         ArquivoService,
         AuditoriaService,
         AuthService,
@@ -59,6 +67,7 @@ import { UsuarioSchema } from './entities/usuario.entity';
         LocalStrategy,
         TurmaService,
         UsuarioService,
+        { provide: DI_AGENDAMENTO_REPOSITORY, useClass: AgendamentoRepository },
         { provide: DI_ARQUIVO_REPOSITORY, useClass: ArquivoRepository },
         { provide: DI_AUDITORIA_REPOSITORY, useClass: AuditoriaRepository },
         { provide: DI_TURMA_REPOSITORY, useClass: TurmaRepository },

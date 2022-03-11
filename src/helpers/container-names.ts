@@ -9,3 +9,6 @@ export const DI_ARQUIVO_REPOSITORY = "ARQUIVO_REPOSITORY";
 
 export const DI_TURMA_SCHEMA = "turma";
 export const DI_TURMA_REPOSITORY = "TURMA_REPOSITORY";
+
+export const DI_AGENDAMENTO_SCHEMA = "agendamento";
+export const DI_AGENDAMENTO_REPOSITORY = "AGENDAMENTO_REPOSITORY";
